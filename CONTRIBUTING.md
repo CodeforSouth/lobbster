@@ -1,8 +1,18 @@
 
 # Contributing to Lobbster 🦀
 
-In the spirit of open source software, **everyone** is encouraged to help
-improve this project.
+:+1::tada: First off, thanks for taking the time to contribute! :tada::+1:
+
+The following is a set of guidelines for contributing to Lobbster. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+
+#### Table Of Contents
+
+[Code of Conduct](#code-of-conduct)
+
+
+## Code of Conduct
+
+This project and everyone participating in it is governed by the [Lobbster Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [codeformiami@gmail.com](mailto:codeformiami@gmail.com).
 
 ### Ways *you* can contribute:
 * by [installing and testing the software][install_instructions]
