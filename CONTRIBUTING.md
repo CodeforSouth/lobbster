@@ -5,14 +5,26 @@
 
 The following is a set of guidelines for contributing to Lobbster. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
-#### Table Of Contents
+## Table Of Contents
 
 [Code of Conduct](#code-of-conduct)
 
+[I don't want to read this whole thing I just have a question!!!]()
 
-## Code of Conduct
+### Code of Conduct
 
 This project and everyone participating in it is governed by the [Lobbster Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [codeformiami@gmail.com](mailto:codeformiami@gmail.com).
+
+### I don't want to read this whole thing I just have a question!!!
+
+> **Note:** Please don't file an issue to ask a question. You'll get faster results by using slack.
+
+If the question is in regards to an issue or pull request, ask the question there. If it is not we have an official slack channel where the community chimes in with helpful advice.
+
+* [Join the Code For Miami Team](join_slack)
+    * Even though Slack is a chat service, sometimes it takes several hours for community members to respond &mdash; please be patient!
+    * Use the `#lobbster` channel for general questions or discussion about Lobbster
+    * There are many other channels available that cover other Code For Miami projects, check the channel list
 
 ### Ways *you* can contribute:
 * by [installing and testing the software][install_instructions]
@@ -85,7 +97,7 @@ to **step 7**.
 11. **Pull request:** [Submit a pull request][pr] to send your changes to this
 repository for review.
 
-
+[join_slack]: http://cfm-invite.herokuapp.com/
 [install_instructions]: https://github.com/Code-for-Miami/lobbster#install
 [open_prs]: https://github.com/Code-for-Miami/lobbster/pulls?q=is%3Aopen+is%3Apr
 [donate]: http://codefor.miami/get-started-with-civic-hacking#_givealways
