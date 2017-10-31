@@ -1,5 +1,6 @@
 
-## How to Contribute
+# Contributing to Lobbster 🦀
+
 In the spirit of open source software, **everyone** is encouraged to help
 improve this project.
 
