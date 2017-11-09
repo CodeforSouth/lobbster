@@ -1,17 +1,14 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.20'
+gem 'rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg'
+gem 'pg' # An Elephant never forgets
 
 # Use unicorn as the web server
 # gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
 
 # To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
 # gem 'ruby-debug'
@@ -23,9 +20,28 @@ gem 'pg'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 # gem 'aws-s3', :require => 'aws/s3'
 
-# Bundle gems for the local environment. Make sure to
-# put test-only gems in this group so their generators
-# and rake tasks are available in development mode:
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'pry-byebug'
+  gem 'rspec-rails' # Great Expectations
+  gem 'factory_bot_rails' # Assembly The Testing Models
+  gem 'shoulda-matchers', '~> 3.1' # Should Coulda Woulda
+  gem 'faker' # The Fakest of the Fake
+  gem 'database_cleaner' # Database Janitor
+  gem 'awesome_print'
+  gem 'fuubar'
 end
+
+group :development do
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'spring' # Make The App Springy
+  gem 'spring-watcher-listen' # Watch The Springy App
+  gem 'better_errors' # Better Errors
+  gem 'binding_of_caller' # Better Error Page Debugging
+end
+
+group :test do
+  gem 'simplecov', :require => false
+end
+
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # What day is it?
