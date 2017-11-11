@@ -87,6 +87,7 @@ We do our best to follow the [BetterSpecs](http://www.betterspecs.org/) Testing 
 Testing is setup with [RSpec Rails](https://relishapp.com/rspec/rspec-rails/) and We are using[Factory Bot ](http://www.rubydoc.info/gems/factory_bot) with [Faker](https://github.com/stympy/faker) to create our fixtures with randomized data.
 [Shoulda Matchers](https://github.com/thoughtbot/shoulda-matchers) has been added to simplify validations.
 
+This is an API we are only writing unit tests on our Models and integration tests in the form of Request Specs that will simultaneously cover Response, Routing, and the Controllers.
 
 6. **Test to fail:** Run `rspec`. If your specs pass, return to
 **step 5**. In the spirit of Test-Driven Development, you want to write a
