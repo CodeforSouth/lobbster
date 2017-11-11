@@ -13,4 +13,7 @@
 !/log/.keep
 !/tmp/.keep
 
+# Testing Temp Files
+/spec/examples.txt
 .byebug_history
+coverage/
