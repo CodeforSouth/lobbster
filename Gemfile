@@ -11,7 +11,6 @@ gem 'rails', '~> 5.1.4'
 
 gem 'puma', '~> 3.7' # That's one fast cat
 
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 
@@ -29,11 +28,11 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-byebug'
   gem 'rspec-rails' # Great Expectations
-  gem 'factory_bot_rails' # Assembly The Testing Models
-  gem 'shoulda-matchers', '~> 3.1' # Should Coulda Woulda
+  gem 'factory_bot_rails' # Assemble The Fixtures
+  gem 'shoulda-matchers', '~> 3.1' # Shoulda Coulda Woulda
   gem 'faker' # The Fakest of the Fake
   gem 'database_cleaner' # Database Janitor
-  gem 'awesome_print' # Pretty Ruby Data Type Printing `ap`
+  gem 'awesome_print' # The best printer, really, you have to see it, it's awesome
 end
 
 group :development do
