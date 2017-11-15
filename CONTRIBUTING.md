@@ -81,6 +81,7 @@ on your computer.
 you're addressing.
 
 5. **Write Specs:**
+   
    We do our best to follow the [BetterSpecs](http://www.betterspecs.org/) Testing Style Guide.
 
    Testing is setup with [RSpec Rails](https://relishapp.com/rspec/rspec-rails/) and We are using[Factory Bot ](http://www.rubydoc.info/gems/factory_bot) with [Faker](https://github.com/stympy/faker) to create our fixtures with randomized data.
