@@ -3,6 +3,10 @@ require 'rails_helper'
 
 
 RSpec.describe  User do
+
+  subject{
+    User.new(email: "ed@ed.com", password: "password", password_confirmation: "password")
+  }
   it "it creates a User on .new" do
     assert_instance_of User, (User.new)
   end
@@ -36,23 +40,22 @@ RSpec.describe  User do
   end
 
   it "validates :email presence" do
-    new_user = User.new( password: "password", password_confirmation: "password")
-   refute new_user.save
+   subject.email = nil
+   refute subject.save
   end
 
   it "validates :password presence" do
-   new_user = User.new( email: "ed@ed.com", password_confirmation: "password")
-   refute new_user.save
+   subject.password = nil
+   refute subject.save
   end
 
-  it "User rejects identical emails" do
+  it "rejects identical emails" do
      valid_user = User.create(email: "ed@ed.com", password: "password", password_confirmation: "password")
-     new_user = User.new(email: "ed@ed.com", password: "password", password_confirmation: "password")
-     refute new_user.save
+     refute subject.save
   end
 
   it "confirms password input" do
-    new_user = User.new(email: "ed@ed.com", password: "password", password_confirmation: "notpassword")
-    refute new_user.save
+    subject.password_confirmation = "notpassword"
+    refute subject.save
   end
 end
