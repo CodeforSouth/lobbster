@@ -41,6 +41,7 @@ group :development do
   gem 'spring-watcher-listen' # Watch The Springy App
   gem 'better_errors' # Better Errors
   gem 'binding_of_caller' # Better Error Page Debugging
+  gem 'pry-rails' # Get To The Code
 end
 
 group :production do
