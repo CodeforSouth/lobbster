@@ -20,4 +20,5 @@
 # Testing Temp Files
 /spec/examples.txt
 .byebug_history
+.idea/
 coverage/
