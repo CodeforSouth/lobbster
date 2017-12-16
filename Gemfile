@@ -41,6 +41,8 @@ group :development do
   gem 'spring-watcher-listen' # Watch The Springy App
   gem 'better_errors' # Better Errors
   gem 'binding_of_caller' # Better Error Page Debugging
+  gem 'rubocop', require: false # Police the ruby code
+  gem 'rubocop-rails' # Basic Laws for rubocop
 end
 
 group :production do
