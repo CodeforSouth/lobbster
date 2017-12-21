@@ -1,0 +1,9 @@
+inherit_gem:
+  rubocop-rails:
+    - config/rails.yml
+
+AllCops:
+  DisabledByDefault: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
