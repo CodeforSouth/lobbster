@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IssuesController < ApplicationController
   before_action :set_issue, only: [:show, :update, :destroy]
 
@@ -39,6 +41,7 @@ class IssuesController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_issue
       @issue = Issue.find(params[:id])
@@ -46,6 +49,8 @@ class IssuesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def issue_params
-      params.require(:issue).permit(:user_id, :principal, :address, :city, :state, :zip, :phone, :description, :non_profit, :ein_number)
+      params.require(:issue).permit(:user_id, :principal, :address, :city,
+                                    :state, :zip, :phone, :description,
+                                    :non_profit, :ein_number)
     end
 end

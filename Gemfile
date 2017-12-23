@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -25,7 +27,7 @@ gem 'puma', '~> 3.7' # That's one fast cat
 
 group :development, :test do
   gem 'awesome_print' # The best printer, really, everybody says so, everybody
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'database_cleaner' # Database Janitor
   gem 'factory_bot_rails' # Assemble The Fixtures
   gem 'faker' # The Fakest of the Fake
@@ -49,4 +51,4 @@ group :production do
   gem 'pg' # An Elephant never forgets
 end
 
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby] # Timey Wimey Windows
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby] # Timey Wimey Windows

@@ -4,6 +4,19 @@ inherit_gem:
 
 AllCops:
   DisabledByDefault: false
+  Exclude:
+      - 'db/**/*'
+      - 'bin/**/*'
+      - 'config/**/*'
+
+Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
 
 Style/StringLiterals:
   EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
