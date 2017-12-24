@@ -2,6 +2,9 @@ inherit_gem:
   rubocop-rails:
     - config/rails.yml
 
+Rails:
+  Enabled: true
+
 AllCops:
   DisabledByDefault: false
   Exclude:
