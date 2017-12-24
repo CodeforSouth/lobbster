@@ -108,6 +108,10 @@ RSpec.describe "Issues", type: :request do
         expect(response_body["zip"]).to eq 33317
       end
     end
+
+    context 'with invalid params' do
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+    end
   end
 
   describe 'PUT issues/:id' do
