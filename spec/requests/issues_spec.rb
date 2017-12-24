@@ -110,7 +110,7 @@ RSpec.describe "Issues", type: :request do
     end
 
     context 'with invalid params' do
-      it { expect(response).to have_http_status(:unprocessable_entity) }
+      xit { expect(response).to have_http_status(:unprocessable_entity) }
     end
   end
 
