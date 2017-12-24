@@ -109,4 +109,18 @@ RSpec.describe "Issues", type: :request do
       end
     end
   end
+
+  describe 'PUT issues/:id' do
+    context 'with valid params' do
+      it 'updates the requested issue'
+    end
+
+    context 'with invalid params' do
+      xit { expect(response).to have_http_status(:unprocessable_entity) }
+    end
+  end
+
+  describe 'DELETE issues/:id' do
+    it 'destroys the requested issue'
+  end
 end
