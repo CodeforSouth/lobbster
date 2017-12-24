@@ -18,6 +18,9 @@ Documentation:
 Metrics/LineLength:
   Enabled: false
 
+Metrics/BlockLength:
+  Enabled: false
+
 Style/StringLiterals:
   EnforcedStyle: single_quotes
 
