@@ -1,0 +1,29 @@
+inherit_gem:
+  rubocop-rails:
+    - config/rails.yml
+
+Rails:
+  Enabled: true
+
+AllCops:
+  DisabledByDefault: false
+  Exclude:
+      - 'db/**/*'
+      - 'bin/**/*'
+      - 'config/**/*'
+      - 'vendor/**/*'
+
+Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
