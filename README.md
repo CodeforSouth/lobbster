@@ -1,4 +1,4 @@
-# Lobbster
+# Lobbster [![Build Status](https://travis-ci.org/Code-for-Miami/lobbster.svg?branch=setup_travis_ci)](https://travis-ci.org/Code-for-Miami/lobbster)
 
 ## What
 

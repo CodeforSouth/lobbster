@@ -76,8 +76,12 @@ on your computer.
 
 3. **Install Dependencies:** From the root directory of the app, run `bundle`.
 
-4. **Branch:** [Create a topic branch][branch] for the one specific issue
+4. **Branch:** (Create a topic branch)[https://github.com/Code-for-Miami/project_guide/blob/master/docs/topic_branch.md] for the specific issue
 you're addressing.
+
+5. **Write Code** 
+
+  We do our best to follow the (Ruby Style Guide)[https://github.com/bbatsov/rails-style-guide] and (Rails Style Guide)[https://github.com/bbatsov/rails-style-guide] we lint our Ruby and Rails code with (Rubocop)[https://github.com/bbatsov/rubocop] we aren't zealots about it so we can be reasoned with a convincing enough argument into changing what is linted.
 
 5. **Write Specs:**
 
