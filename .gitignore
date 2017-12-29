@@ -16,6 +16,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+.idea/
 
 # Testing Temp Files
 /spec/examples.txt
