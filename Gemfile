@@ -25,6 +25,9 @@ gem 'puma', '~> 3.7' # That's one fast cat
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+  gem 'devise'
+  gem 'devise-jwt'
+
 group :development, :test do
   gem 'awesome_print' # The best printer, really, everybody says so, everybody
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

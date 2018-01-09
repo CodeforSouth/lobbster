@@ -2,6 +2,7 @@
 
 class IssuesController < ApplicationController
   before_action :set_issue, only: [:show, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /issues
   def index
