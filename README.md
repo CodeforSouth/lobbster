@@ -14,6 +14,8 @@ Lobbyist to be able to submit Expenditure report online.
 Email capabilities to send reminders, receipts and  welcome messages to active Lobbyists.
 Reporting capabilities (Report by Lobbyist, Principal , Issue, Year of Registration, etc.)
 
+
+
 Lobbyist Annual Registration Form
 http://www.coralgables.com/modules/showdocument.aspx?documentid=7375
 Lobbyists Issue Form
