@@ -18,9 +18,12 @@ Reporting capabilities (Report by Lobbyist, Principal , Issue, Year of Registrat
 
 Lobbyist Annual Registration Form
 http://www.coralgables.com/modules/showdocument.aspx?documentid=7375
+
 Lobbyists Issue Form
 http://www.coralgables.com/modules/showdocument.aspx?documentid=7374
+
 Lobbyist Expenditure Form
 http://www.coralgables.com/modules/showdocument.aspx?documentid=7377
+
 Lobbyist Withdrawal Form
 http://www.coralgables.com/modules/showdocument.aspx?documentid=7372
