@@ -1,7 +1,5 @@
 # Lobbster [![Build Status](https://travis-ci.org/Code-for-Miami/lobbster.svg?branch=setup_travis_ci)](https://travis-ci.org/Code-for-Miami/lobbster)
 
-## What
-
 Main requirements for the Lobbyist Registration system:
  
 Allow online Lobbyists registration, using email as username (Lobbyist to confirm information submitted is true.)
@@ -16,26 +14,3 @@ Lobbyist to be able to submit Expenditure report online.
 Email capabilities to send reminders, receipts and  welcome messages to active Lobbyists.
 Reporting capabilities (Report by Lobbyist, Principal , Issue, Year of Registration, etc.)
 
-#### Status
-
-Gathering Requirements.
-
-#### Press
-
-## Why
-
-## Who
-
-## How
-#### Dependencies
-
-#### Install
-
-#### Deploy
-
-## Contribute
-If you would like to contribute please read our guidelines. [CONTRIBUTING](CONTRIBUTING.md)
-
-## License
-
-We are using a [BSD 3-clause "New" or "Revised" License](LICENSE.md)
