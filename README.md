@@ -27,3 +27,5 @@ http://www.coralgables.com/modules/showdocument.aspx?documentid=7377
 
 Lobbyist Withdrawal Form
 http://www.coralgables.com/modules/showdocument.aspx?documentid=7372
+
+User Stories: https://docs.google.com/document/d/1t2cMJXUTG7EapCVwKge8hFIEIcxjyuKCkgldrs6MbpU/edit
