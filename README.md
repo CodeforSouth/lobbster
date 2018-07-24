@@ -23,11 +23,11 @@ Lobbster is an open-source website that helps lobbyists comply with reporting re
 * Email capabilities to send reminders, receipts and  welcome messages to active Lobbyists.
 * Reporting capabilities (Report by Lobbyist, Principal , Issue, Year of Registration, etc.)
 
-#### Status
+## Status
 
 Gathering Requirements.
 
-#### Press
+## Press
 
 ## Why
 
