@@ -10,8 +10,8 @@ Ordinance No. 2017-44 creates requirements for lobbyists to submit four types of
   * Each year, copy of this application must be submitted for each principal that the lobbyist represents.
   * A $250 annual fee is collected with the application if 1) the lobbyist hasn't already paid the fee for the year that the application applies to and 2) the lobbyist application doesn't qualify for a number of exemptions.
 * *Issue Application*
-  * Each year, copies of this application must be submitted submitted to list all of the issues that the lobbyist is representing for its principles.
-  * A copy of this application is principle-specific, meaning that duplicate issues represented across multiple principals will need to be reported multiple times (one time per principal).
+  * Each year, copies of this application must be submitted submitted to list all of the issues that the lobbyist is representing for its principals.
+  * A copy of this application is principal-specific, meaning that duplicate issues represented across multiple principals will need to be reported multiple times (one time per principal).
 * *Lobbyist Expenditure Report*
 * *Notice of Withdrawal of Lobbyist Registration*
 
@@ -26,14 +26,14 @@ In addition to these forms, the ordinace requires ammendements to be filed for ?
 * Allow online lobbyist registration.
 * Usernames should be email addresses.
 * Confirmation step for lobbyists to assent that the information they submit is true.
-* Allow lobbyists to register for their Principles.
+* Allow lobbyists to register for their principals.
   * Collect the $150 fee.
   * Not-for-profit lobbyists will click on “Wave Fee.”
   * Registration is valid until December 31st in the year of registration.
   * Registration will be pending until City staff confirm ‘Not for Profit’ status.
 * Allow lobbyists to submit a withdrawal form at any time to notify the City they are no longer representing a Principal.
 * Allow Lobbyist to register each Issue.
-  * Unlike registering a Principle, this does not require a fee.
+  * Unlike registering a principal, this does not require a fee.
 * Allow Lobbyist to submit an Expenditure report online.
 * Email capabilities to send reminders, receipts and  welcome messages to active Lobbyists.
 * Reporting capabilities (Report by Lobbyist, Principal , Issue, Year of Registration, etc.)
