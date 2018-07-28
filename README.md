@@ -1,8 +1,23 @@
 # Lobbster [![Build Status](https://travis-ci.org/Code-for-Miami/lobbster.svg?branch=setup_travis_ci)](https://travis-ci.org/Code-for-Miami/lobbster)
 
-## What
+Lobbster is an open-source project to help lobbyists comply with reporting requirements for the City of Coral Gables.
 
-Lobbster is an open-source website that helps lobbyists comply with reporting requirements for the City of Coral Gables.
+## Background
+### Lobbyist Responsibilities
+Ordinance No. 2017-44 creates requirements for lobbyists to submit four types of documents.
+
+* *Annual Registration Application*
+  * Each year, copy of this application must be submitted for each principal that the lobbyist represents.
+  * A $250 annual fee is collected with the application if 1) the lobbyist hasn't already paid the fee for the year that the application applies to and 2) the lobbyist application doesn't qualify for a number of exemptions.
+* *Issue Application*
+  * Each year, copies of this application must be submitted submitted to list all of the issues that the lobbyist is representing for its principles.
+  * A copy of this application is principle-specific, meaning that duplicate issues represented across multiple principals will need to be reported multiple times (one time per principal).
+* *Lobbyist Expenditure Report*
+* *Notice of Withdrawal of Lobbyist Registration*
+
+In addition to these forms, the ordinace requires ammendements to be filed for ???.
+
+### City Clerk Responsibilities
 
 ## Requirements
 
