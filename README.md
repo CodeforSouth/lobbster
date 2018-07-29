@@ -7,24 +7,25 @@ Lobbster is an open-source project to help lobbyists comply with reporting requi
 Section 2-243 of the _Code of the City of Coral Gables_ creates requirements for non-exempt lobbyists to submit five types of documentation, four of which are submitted as forms to the City Clerk.
 
 * *Annual Registration Application*
-  * Each year, a separate copy of this application must be submitted for each principal that the lobbyist represents.
-  * A $250 annual fee is collected with the application if 1) the lobbyist hasn't already paid the fee for the year that the application applies to and 2) the registration application doesn't qualify for any fee exemptions.
+  * This application is principal-specific; each year, the lobbyist must submit a separate copy of the application for each principal that they represent.
+  * A $250 annual fee is collected with the application unless the lobbyist has already paid the fee for the year or the application qualifies for a fee exemption.
 * *Issue Application*
-  * Each year, for each principal that the lobbyist represents, a copy of this application must be submitted submitted to list all of the issues that the lobbyist is representing for that principal.
+  * This application is also principal-specific; each year, the lobbyist must submit a separate copy of the application for each of their principals, to list all of the issues that they represent for that principal.
   * Because this application is principal-specific, duplicate issues represented across multiple principals will need to be reported multiple times (one time per principal).
 * *Lobbyist Expenditure Report*
-  * On October 1st of each year, lobbyists who were registered for the prior year must submit expenditure reports for the prior year, regardless of whether or not any expenses were actually incurred.
   * These reports are specific to particular (principal, issue) pairs; a lobbyist must submit one report for each principle/issue combination that they represented.
+  * On October 1st of each year, lobbyists who were registered for the prior year must submit expenditure reports for the prior year, regardless of whether or not any expenses were actually incurred.
 * *Notice of Withdrawal of Lobbyist Registration*
   * Whenever a lobbyist withdraws as lobbyist for a principal, they must file a withdrawal notice.
 * *Amendments*
   * Amendments to these forms must be submitted whenever a change occurs to the information that has been filed. Whether the ammendments have a required format is unclear.
 
+Most of the forms require that the lobbyist sign a statement agreeing to some terms, or swearing under oath that the information on the form is correct.
+
 ### City Clerk Responsibilities
 * Approve lobbyist registration and issue applications.
+* Collect lobbyist fees---and presumably, return fees that are paid by mistake.
 * Maintain the records that are submitted.
-* Verify that fees are paid.
-* Presumably, return fees that are paid by mistake.
 * Prepare and publish reports on lobbying activity.
 
 ## Requirements
