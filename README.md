@@ -24,6 +24,7 @@ Most of the forms require that the lobbyist sign a statement agreeing to some te
 
 ### City Clerk Responsibilities
 * Approve lobbyist registration and issue applications.
+* Verify the identities of the people who submit applications and expenditure reports.
 * Collect lobbyist fees---and presumably, return fees that are paid by mistake.
 * Maintain the records that are submitted.
 * Prepare and publish reports on lobbying activity.
