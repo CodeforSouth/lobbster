@@ -42,7 +42,7 @@ group :development do
   gem 'binding_of_caller' # Better Error Page Debugging
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'rubocop', require: false # Police the ruby code
-  gem 'rubocop-rails' # Basic Laws for rubocop
+  gem 'rubocop-rails_config' # Basic Laws for rubocop
   gem 'spring' # Make The App Springy
   gem 'spring-watcher-listen' # Watch The Springy App
 end
