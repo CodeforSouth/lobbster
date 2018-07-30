@@ -18,7 +18,7 @@ Section 2-243 of the _Code of the City of Coral Gables_ creates requirements for
 * *Notice of Withdrawal of Lobbyist Registration*
   * Whenever a lobbyist withdraws as lobbyist for a principal, they must file a withdrawal notice.
 * *Amendments*
-  * Amendments to these forms must be submitted whenever a change occurs to the information that has been filed. Whether the ammendments have a required format is unclear.
+  * Amendments to these forms must be submitted whenever a change occurs to the information that has been filed. Whether the amendments have a required format is unclear.
 
 Most of the forms require that the lobbyist sign a statement agreeing to some terms, or swearing under oath that the information on the form is correct.
 
@@ -58,7 +58,7 @@ The process for an administrator to verify a lobbyist's identity has not been de
 
 #### Lobbyist Document Submission
 
-Lobbyist accounts can fill out and submit forms that fulfil their reporting requirements.
+Lobbyist accounts can fill out and submit forms that fulfill their reporting requirements.
 
 A form will automatically be saved as a draft that can be reopened and resumed later. The draft will exist until the form is submitted or deleted.
 
@@ -91,7 +91,7 @@ The page is available to lobbyists for working with their own account, and to ad
 
 #### Document Viewing Page
 
-This page shows a submitted document. It is availalbe to both lobbyists and administrators for reviewing documents. Generally, this page is accessed by clicking a link for viewing a particular non-draft document.
+This page shows a submitted document. It is available to both lobbyists and administrators for reviewing documents. Generally, this page is accessed by clicking a link for viewing a particular non-draft document.
 
 A timeline of status changes with links to previous document versions is provided.
 
@@ -102,7 +102,7 @@ Administrator-specific features:
 Lobbyist-specific features:
 * Allows creating a resubmission with modifications, if the document was rejected and is the most recent version of the document.
 * Allows creating an amended submission, if the document was approved and is the most recent version of the document.
-* If a draft resubmission or amendment exists, the user will see a prominant link to access and continue working on the draft.
+* If a draft resubmission or amendment exists, the user will see a prominent link to access and continue working on the draft.
 
 #### Document Editing Page
 
