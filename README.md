@@ -2,6 +2,21 @@
 
 Lobbster is an open-source project to help lobbyists comply with reporting requirements for the City of Coral Gables.
 
+## Getting Started
+These instructions are for getting a development version of the project running locally. Beyond these setup instructions, you will also need access to a running MongoDB instance.
+1. Clone the repository.
+2. Install dependencies by running the install-dev script from the root project directory.
+```
+npm run install-dev
+```
+3. Create a dev-keys.js file in the config directory. It should be just like prod-keys.js, but with your values in place of the process.env ones. You will need:
+   * A URI for accessing a development-specific MongoDB instance.
+   * A secret for express-session to use.
+4. Launch the project locally by calling the dev script from the root project directory.
+```
+npm run dev
+```
+
 ## Background
 ### Lobbyist Responsibilities
 Section 2-243 of the _Code of the City of Coral Gables_ creates requirements for non-exempt lobbyists to submit five types of documentation, four of which are submitted as forms to the City Clerk.
