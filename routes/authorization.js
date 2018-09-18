@@ -15,7 +15,7 @@ module.exports = (app) => {
       firstName,
       lastName,
       emailAddress,
-      password,
+      password
     } = req.body;
     try {
       const passwordHash = await hash(password);
@@ -26,7 +26,7 @@ module.exports = (app) => {
         passwordHash,
         identityVerified: false,
         emailVerified: false,
-        isAdmin: false,
+        isAdmin: false
       }).save();
       res.status(200).send();
     } catch (error) {

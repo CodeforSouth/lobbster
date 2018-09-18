@@ -5,7 +5,7 @@
     "node": true
   },
   rules: {
-    "comma-dangle": "off",
+    "comma-dangle": ["error", "never"],
     "no-else-return": "off",
     "no-confusing-arrow": "off",
     "react/jsx-filename-extension": "off",
