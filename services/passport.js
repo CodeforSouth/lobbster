@@ -12,7 +12,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   User.findById(id, (err, user) => {
     done(err, user);
-  });
+  }).select('-passwordHash');
 });
 
 passport.use(new LocalStrategy(
@@ -28,7 +28,6 @@ passport.use(new LocalStrategy(
         return done(null, existingUser);
       }
       return done(null, false, { message: 'Invalid password.' });
-
     }
     return done(null, false, { message: 'Invalid user.' });
   }

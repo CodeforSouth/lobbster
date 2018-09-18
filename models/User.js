@@ -1,15 +1,27 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
-const userSchema = new Schema ({
+function toLowerCase(v) {
+  return v.toLowerCase();
+}
+
+const userSchema = new Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
   emailAddress: {
     type: String,
     required: true,
-    unique: true
+    lowercase: true,
+    set: toLowerCase,
+    unique: true,
   },
-  passwordHash: String,
-  emailVerified: Boolean,
-  isAdmin: Boolean
+  passwordHash: { type: String, required: true },
+  identityVerified: { type: Boolean, required: true },
+  emailVerified: { type: Boolean, required: true },
+  isAdmin: { type: Boolean, required: true },
+}, {
+  runSettersOnQuery: true,
 });
 
 mongoose.model('users', userSchema);
