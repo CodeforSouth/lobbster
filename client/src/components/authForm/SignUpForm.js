@@ -45,9 +45,9 @@ class SignUpForm extends Component {
     try {
       this.setState({ signupRequestState: submitted });
       await registerUser(firstName, lastName, emailAddress, password);
+      this.setState({ signupRequestState: succeeded });
       await login(emailAddress, password);
       await updateCurrentUser();
-      this.setState({ signupRequestState: succeeded });
     } catch (err) {
       this.setState({ signupRequestState: failed });
     }

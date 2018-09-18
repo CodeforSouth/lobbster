@@ -38,8 +38,8 @@ class LoginForm extends Component {
     try {
       this.setState({ loginRequestState: submitted });
       await login(emailAddress, password);
-      await updateCurrentUser();
       this.setState({ loginRequestState: succeeded });
+      await updateCurrentUser();
     } catch (err) {
       this.setState({ loginRequestState: failed });
     }
