@@ -10,6 +10,8 @@ import { isNonemptyObject } from '../utilities/utilities';
 import Dashboard from './dashboard/Dashboard';
 import Landing from './Landing';
 import Navbar from './navigation/Navbar';
+import UserAccountManagement from './userAccountManagement/UserAccountManagement';
+import EditUserAccount from './userAccountManagement/EditUserAccount';
 
 class App extends Component {
   constructor(props) {
@@ -79,6 +81,27 @@ class App extends Component {
             exact
             render={props => (
               <Dashboard
+                {...props}
+                user={currentUser}
+                userIsAuthenticated={userIsAuthenticated}
+              />
+            )}
+          />
+          <Route
+            path="/user-account-management"
+            exact
+            render={props => (
+              <UserAccountManagement
+                {...props}
+                user={currentUser}
+                userIsAuthenticated={userIsAuthenticated}
+              />
+            )}
+          />
+          <Route
+            path="/edit-user-account/:emailAddress"
+            render={props => (
+              <EditUserAccount
                 {...props}
                 user={currentUser}
                 userIsAuthenticated={userIsAuthenticated}
