@@ -5,8 +5,8 @@ import LandingNavbar from './LandingNavbar';
 import LobbyistNavbar from './LobbyistNavbar';
 import AdminNavbar from './AdminNavbar';
 
-function selectNavbar(user, endSession) {
-  if (user === null || Object.keys(user).length === 0) {
+function selectNavbar(user, endSession, userIsAuthenticated) {
+  if (!userIsAuthenticated) {
     return <LandingNavbar />;
   } else if (user.isAdmin) {
     return <AdminNavbar endSession={endSession} user={user} />;
@@ -22,10 +22,10 @@ class Navbar extends Component {
   }
 
   render() {
-    const { user, endSession } = this.props;
+    const { user, endSession, userIsAuthenticated } = this.props;
     return (
       <div>
-        {selectNavbar(user, endSession)}
+        {selectNavbar(user, endSession, userIsAuthenticated)}
       </div>
     );
   }
@@ -33,7 +33,8 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   user: PropTypes.object,
-  endSession: PropTypes.func.isRequired
+  endSession: PropTypes.func.isRequired,
+  userIsAuthenticated: PropTypes.bool.isRequired
 };
 
 Navbar.defaultProps = {

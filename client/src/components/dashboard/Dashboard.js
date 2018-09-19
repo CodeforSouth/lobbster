@@ -1,26 +1,26 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import AdminDashboard from './admin/AdminDashboard';
 import LobbyistDashboard from './lobbyist/LobbyistDashboard';
 
-const Dashboard = ({ user }) => {
-  let dashboard = null;
-  if (user.isAdmin) {
-    dashboard = <AdminDashboard user={user} />;
+const Dashboard = ({ user, userIsAuthenticated }) => {
+  if (!userIsAuthenticated) {
+    return <Redirect to="/" />;
+  } else if (user.isAdmin) {
+    return <AdminDashboard user={user} />;
   } else {
-    dashboard = <LobbyistDashboard user={user} />;
+    return <LobbyistDashboard user={user} />;
   }
-
-  return (
-    <div>
-      {dashboard}
-    </div>
-  );
 };
 
 Dashboard.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object,
+  userIsAuthenticated: PropTypes.bool.isRequired
+};
+Dashboard.defaultProps = {
+  user: null
 };
 
 export default Dashboard;

@@ -2,23 +2,14 @@ import 'bulma/css/bulma.css';
 import './App.css';
 
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import { fetchUser, logout } from '../requests/authRequests';
+import { isNonemptyObject } from '../utilities/utilities';
 
 import Dashboard from './dashboard/Dashboard';
 import Landing from './Landing';
 import Navbar from './navigation/Navbar';
-
-
-function selectHero(user, updateCurrentUser) {
-  if (user === null) {
-    return <div>Loading</div>;
-  } else if (Object.keys(user).length === 0) {
-    return <Landing updateCurrentUser={updateCurrentUser} />;
-  } else {
-    return <Dashboard user={user} />;
-  }
-}
 
 class App extends Component {
   constructor(props) {
@@ -48,16 +39,55 @@ class App extends Component {
     await this.updateCurrentUser();
   }
 
+  userIsAuthenticated() {
+    const { currentUser } = this.state;
+    return isNonemptyObject(currentUser);
+  }
+
   render() {
     const { currentUser } = this.state;
+    const userIsAuthenticated = this.userIsAuthenticated();
     return (
-      <section className="hero is-primary is-fullheight">
-        <div className="hero-head">
-          <Navbar endSession={this.endSession} user={currentUser} />
-        </div>
-        {selectHero(currentUser, this.updateCurrentUser)}
-        <div className="hero-foot" />
-      </section>
+      <BrowserRouter>
+        <section className="hero is-primary is-fullheight">
+          <div className="hero-head">
+            <Route
+              path="/"
+              render={props => (
+                <Navbar
+                  {...props}
+                  endSession={this.endSession}
+                  user={currentUser}
+                  userIsAuthenticated={userIsAuthenticated}
+                />
+              )}
+            />
+          </div>
+          <Route
+            path="/"
+            exact
+            render={props => (
+              <Landing
+                {...props}
+                updateCurrentUser={this.updateCurrentUser}
+                userIsAuthenticated={userIsAuthenticated}
+              />
+            )}
+          />
+          <Route
+            path="/dashboard"
+            exact
+            render={props => (
+              <Dashboard
+                {...props}
+                user={currentUser}
+                userIsAuthenticated={userIsAuthenticated}
+              />
+            )}
+          />
+          <div className="hero-foot" />
+        </section>
+      </BrowserRouter>
     );
   }
 }
