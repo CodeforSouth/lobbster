@@ -12,7 +12,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   User.findById(id, (err, user) => {
     done(err, user);
-  }).select('-passwordHash');
+  });
 });
 
 passport.use(new LocalStrategy(
@@ -21,10 +21,11 @@ passport.use(new LocalStrategy(
     passwordField: 'password'
   },
   async (emailAddress, password, done) => {
-    const existingUser = await User.findOne({ emailAddress });
+    const existingUser = await User.findOne({ emailAddress }).select('+passwordHash');
     if (existingUser) {
       const correctPassword = await match(password, existingUser.passwordHash);
       if (correctPassword) {
+        existingUser.passwordHash = '';
         return done(null, existingUser);
       }
       return done(null, false, { message: 'Invalid password.' });
