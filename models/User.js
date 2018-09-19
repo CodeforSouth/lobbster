@@ -14,14 +14,14 @@ const userSchema = new Schema({
     required: true,
     lowercase: true,
     set: toLowerCase,
-    unique: true,
+    unique: true
   },
-  passwordHash: { type: String, required: true },
+  passwordHash: { type: String, required: true, select: false },
   identityVerified: { type: Boolean, required: true },
   emailVerified: { type: Boolean, required: true },
-  isAdmin: { type: Boolean, required: true },
+  isAdmin: { type: Boolean, required: true }
 }, {
-  runSettersOnQuery: true,
+  runSettersOnQuery: true
 });
 
 mongoose.model('users', userSchema);
