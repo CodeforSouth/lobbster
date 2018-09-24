@@ -51,10 +51,10 @@ module.exports = (app) => {
   app.use('/api/admin', (req, res, next) => {
     if (!req.user) {
       res.status(401).send();
-    }
-    if (!req.user.isAdmin) {
+    } else if (!req.user.isAdmin) {
       res.status(403).send();
+    } else {
+      next();
     }
-    next();
   });
 };
