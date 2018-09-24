@@ -6,6 +6,7 @@ const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
+require('./models/Document');
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
@@ -32,6 +33,7 @@ app.use(passport.session());
 
 require('./routes/authorization')(app);
 require('./routes/userManagement')(app);
+require('./routes/documents')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
