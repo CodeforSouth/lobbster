@@ -28,15 +28,14 @@ module.exports = (app) => {
         'firstName',
         'lastName',
         'emailAddress',
-        'identityVerified',
         'emailVerified',
         'isAdmin'
       ];
       const { _id } = req.body.params;
 
       const updates = {};
-      updateTargets.forEach((feild) => {
-        updates[feild] = req.body.params[feild];
+      updateTargets.forEach((field) => {
+        updates[field] = req.body.params[field];
       });
       const user = await User.findByIdAndUpdate(_id, updates);
       res.status(200).send(user);

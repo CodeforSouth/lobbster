@@ -16,9 +16,6 @@ const accountRow = account => (
       </Link>
     </td>
     <td>{`${account.firstName} ${account.lastName}`}</td>
-    <td className={booleanToColor(account.identityVerified)}>
-      {booleanToLabel(account.identityVerified)}
-    </td>
     <td className={booleanToColor(account.emailVerified)}>
       {booleanToLabel(account.emailVerified)}
     </td>
@@ -32,7 +29,6 @@ const accountsTable = allAccounts => (
       <tr>
         <th>Email Address</th>
         <th>Owner</th>
-        <th>Identity Verified</th>
         <th>Email Address Verified</th>
         <th>Account Type</th>
       </tr>

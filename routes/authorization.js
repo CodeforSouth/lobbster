@@ -25,7 +25,6 @@ module.exports = (app) => {
         lastName,
         emailAddress,
         passwordHash,
-        identityVerified: false,
         emailVerified: false,
         isAdmin: false
       }).save();

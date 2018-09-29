@@ -19,7 +19,6 @@ export const modifyAccountDetails = async (
   firstName,
   lastName,
   emailAddress,
-  identityVerified,
   emailVerified,
   isAdmin
 ) => {
@@ -31,7 +30,6 @@ export const modifyAccountDetails = async (
         firstName,
         lastName,
         emailAddress,
-        identityVerified,
         emailVerified,
         isAdmin
       }

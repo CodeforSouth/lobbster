@@ -67,10 +67,6 @@ const accountTypeDropdown = (isAdmin, handleChange) => {
   );
 };
 
-// TODO: Identity verification should provide a verified on date that links to a
-// verification record, or a link to create a new verification. For now, it is just
-// providing a drop-down.)
-
 class EditUserAccount extends Component {
   constructor(props) {
     super(props);
@@ -79,7 +75,6 @@ class EditUserAccount extends Component {
       emailAddress: null,
       firstName: null,
       lastName: null,
-      identityVerified: null,
       emailVerified: null,
       isAdmin: null,
       submitRequestStatus: requestStates.initial
@@ -104,7 +99,7 @@ class EditUserAccount extends Component {
     let newValue = target.value;
 
     // Convert string values that should be booleans.
-    const booleanTargets = new Set(['emailVerified', 'identityVerified', 'isAdmin']);
+    const booleanTargets = new Set(['emailVerified', 'isAdmin']);
     if (booleanTargets.has(target.name)) {
       newValue = newValue === 'true';
     }
@@ -121,7 +116,6 @@ class EditUserAccount extends Component {
       firstName,
       lastName,
       emailAddress,
-      identityVerified,
       emailVerified,
       isAdmin
     } = this.state;
@@ -132,7 +126,6 @@ class EditUserAccount extends Component {
         firstName,
         lastName,
         emailAddress,
-        identityVerified,
         emailVerified,
         isAdmin
       );
@@ -147,7 +140,6 @@ class EditUserAccount extends Component {
       emailAddress,
       firstName,
       lastName,
-      identityVerified,
       emailVerified,
       isAdmin,
       submitRequestStatus
@@ -159,7 +151,6 @@ class EditUserAccount extends Component {
             {textFeild('Email Address', 'emailAddress', emailAddress, this.handleChange)}
             {textFeild('First Name', 'firstName', firstName, this.handleChange)}
             {textFeild('Last Name', 'lastName', lastName, this.handleChange)}
-            {booleanDropdown('Identity Verified', 'identityVerified', identityVerified, this.handleChange)}
             {booleanDropdown('Email Address Verified', 'emailVerified', emailVerified, this.handleChange)}
             {accountTypeDropdown(isAdmin, this.handleChange)}
             <div className="field is-grouped">
