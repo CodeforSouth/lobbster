@@ -33,6 +33,7 @@ app.use(passport.session());
 
 require('./routes/authorization')(app);
 require('./routes/userManagement')(app);
+require('./routes/principalDisclosure')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
