@@ -6,6 +6,7 @@ const MongoDBStore = require('connect-mongodb-session')(expressSession);
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
+require('./models/PrincipalDisclosure');
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
