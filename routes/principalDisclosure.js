@@ -7,7 +7,11 @@ const PrincipalDisclosure = mongoose.model('principal_disclosures');
 // of entries' (lobbyistId, reportingYear, principalName) triples.
 async function createNewDisclosure(lobbyistId, reportingYear, principalName) {
   const disclosure = await new PrincipalDisclosure({
-    lobbyistId, reportingYear, principalName, issues: []
+    lobbyistId,
+    reportingYear,
+    principalName,
+    feeWaver: 'not_requested',
+    issues: []
   }).save();
   return disclosure;
 }
