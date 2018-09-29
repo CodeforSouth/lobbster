@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const passport = require('passport');
 const { hash } = require('../services/bcrypt');
+const requireAdmin = require('../middleware/requireAdmin');
 
 const User = mongoose.model('users');
 
@@ -47,14 +48,6 @@ module.exports = (app) => {
     res.status(200).send();
   });
 
-  // Middleware to make the admin API admin-only.
-  app.use('/api/admin', (req, res, next) => {
-    if (!req.user) {
-      res.status(401).send();
-    } else if (!req.user.isAdmin) {
-      res.status(403).send();
-    } else {
-      next();
-    }
-  });
+  // Routes under /api/admin are admin-only.
+  app.use('/api/admin', requireAdmin);
 };
