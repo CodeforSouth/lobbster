@@ -8,7 +8,7 @@ class LandingNavbar extends Component {
 
   render() {
     return (
-      <nav className="navbar is-primary">
+      <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
             <a className="navbar-item" href="/">

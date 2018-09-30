@@ -60,14 +60,12 @@ class UserAccountManagement extends Component {
     const { user } = this.props;
     const { allAccounts } = this.state;
     return (
-      <div className="hero-body has-background-white-ter">
-        <section>
-          <p className="has-text-primary">
-            {user && user.isAdmin && 'You are an admin!'}
-          </p>
-          {accountsTable(allAccounts)}
-        </section>
-        <section />
+      <div className="hero-body has-background-white">
+        <div className="container">
+          <section>
+            {accountsTable(allAccounts)}
+          </section>
+        </div>
       </div>
     );
   }

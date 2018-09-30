@@ -32,7 +32,7 @@ class LobbyistNavbar extends Component {
   render() {
     const { user, endSession } = this.props;
     return (
-      <nav className="navbar is-primary">
+      <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
             <a className="navbar-item" href="/">
@@ -46,7 +46,6 @@ class LobbyistNavbar extends Component {
           </div>
           <div id="navMenu" className="navbar-menu">
             <div className="navbar-end">
-              <Link to="/user-account-management" className="navbar-item">User Account Management</Link>
               <Link to="/" className="navbar-item is-active">Dashboard</Link>
               <Link to="/" className="navbar-item" onClick={endSession}>Logout</Link>
             </div>

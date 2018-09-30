@@ -32,7 +32,7 @@ class AdminNavbar extends Component {
   render() {
     const { user, endSession } = this.props;
     return (
-      <nav className="navbar is-primary">
+      <nav className="navbar">
         <div className="container">
           <div className="navbar-brand">
             <a className="navbar-item" href="/">
