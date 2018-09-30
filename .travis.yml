@@ -1,6 +1,6 @@
-language: ruby
-rvm:
- - 2.4.0
-script:
- - bundle exec rspec
- - bundle exec rubocop
+language: node_js
+sudo: false
+node_js:
+  - "8.9.4"
+install:
+  - npm run install-dev

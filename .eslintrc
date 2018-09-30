@@ -1,0 +1,17 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  rules: {
+    "comma-dangle": ["error", "never"],
+    "no-else-return": "off",
+    "no-confusing-arrow": "off",
+    "react/jsx-filename-extension": "off",
+    "react/forbid-prop-types": "off",
+    "import/no-extraneous-dependencies": "off",
+    "jsx-a11y/label-has-associated-control": off,
+    "jsx-a11y/label-has-for": "off"
+  }
+}

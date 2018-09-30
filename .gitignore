@@ -6,6 +6,9 @@
 
 node_modules
 
+# Ignore keys
+dev-keys.js
+
 # Ignore bundler config.
 /.bundle
 
@@ -24,3 +27,6 @@ node_modules
 /spec/examples.txt
 .byebug_history
 coverage/
+
+# Ignore macOS folder attributes
+.DS_Store
