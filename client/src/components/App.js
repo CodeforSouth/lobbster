@@ -4,6 +4,10 @@ import './App.css';
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+
 import { fetchUser, logout } from '../requests/authRequests';
 import { isNonemptyObject } from '../utilities/utilities';
 
@@ -12,6 +16,9 @@ import Landing from './Landing';
 import Navbar from './navigation/Navbar';
 import UserAccountManagement from './userAccountManagement/UserAccountManagement';
 import EditUserAccount from './userAccountManagement/EditUserAccount';
+
+library.add(faEnvelope);
+library.add(faLock);
 
 class App extends Component {
   constructor(props) {
@@ -51,7 +58,7 @@ class App extends Component {
     const userIsAuthenticated = this.userIsAuthenticated();
     return (
       <BrowserRouter>
-        <section className="hero is-primary is-fullheight">
+        <section className="hero has-background-white is-fullheight">
           <div className="hero-head">
             <Route
               path="/"
