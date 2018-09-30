@@ -11,15 +11,15 @@ const booleanToColor = boolean => boolean ? 'has-text-success' : 'has-text-dange
 const accountRow = account => (
   <tr>
     <td className="has-text-link">
-      <Link to={`/edit-user-account/${account.emailAddress}`}>
-        {account.emailAddress}
+      <Link to={`/edit-user-account/${ account.emailAddress }`}>
+        { account.emailAddress }
       </Link>
     </td>
-    <td>{`${account.firstName} ${account.lastName}`}</td>
-    <td className={booleanToColor(account.emailVerified)}>
-      {booleanToLabel(account.emailVerified)}
+    <td>{ account.fullName }</td>
+    <td className={booleanToColor(account.emailVerified) }>
+      { booleanToLabel(account.emailVerified) }
     </td>
-    <td>{accountTypeToLabel(account.isAdmin)}</td>
+    <td>{ accountTypeToLabel(account.isAdmin) }</td>
   </tr>
 );
 

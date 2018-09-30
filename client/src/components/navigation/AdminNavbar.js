@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function displayName(user) {
-  return `${user.firstName} ${user.lastName}`;
-}
-
 class AdminNavbar extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +32,7 @@ class AdminNavbar extends Component {
         <div className="container">
           <div className="navbar-brand">
             <a className="navbar-item" href="/">
-              {user && displayName(user)}
+              {user && user.fullName}
             </a>
             <span className={this.burgerClassList()} data-target="navMenu" onClick={this.toggleBurger}>
               <span />
