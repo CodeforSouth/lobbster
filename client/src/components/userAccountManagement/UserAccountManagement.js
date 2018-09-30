@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 import { getAccountsList } from '../../requests/userManagement';
 
@@ -8,15 +7,28 @@ const accountTypeToLabel = isAdmin => isAdmin ? 'Admin' : 'Lobbyist';
 const booleanToLabel = boolean => boolean ? 'True' : 'False';
 const booleanToColor = boolean => boolean ? 'has-text-success' : 'has-text-danger';
 
+// Sorts Lobbyists to be first, and then sorts alphabetically by name.
+function sortAccounts(accounts) {
+  accounts.sort((a, b) => {
+    if (a.isAdmin && !b.isAdmin) {
+      return 1;
+    } else if (!a.isAdmin && b.isAdmin) {
+      return -1;
+    } else {
+      return a.fullName.localeCompare(b.fullName);
+    }
+  });
+}
+
 const accountRow = account => (
-  <tr>
+  <tr key={account.emailAddress}>
     <td className="has-text-link">
-      <Link to={`/edit-user-account/${ account.emailAddress }`}>
+      <Link to={`/edit-user-account/${account.emailAddress}`}>
         { account.emailAddress }
       </Link>
     </td>
     <td>{ account.fullName }</td>
-    <td className={booleanToColor(account.emailVerified) }>
+    <td className={booleanToColor(account.emailVerified)}>
       { booleanToLabel(account.emailVerified) }
     </td>
     <td>{ accountTypeToLabel(account.isAdmin) }</td>
@@ -26,7 +38,7 @@ const accountRow = account => (
 const accountsTable = allAccounts => (
   <table className="table">
     <thead>
-      <tr>
+      <tr key="head">
         <th>Email Address</th>
         <th>Owner</th>
         <th>Email Address Verified</th>
@@ -50,6 +62,7 @@ class UserAccountManagement extends Component {
   async componentDidMount() {
     try {
       const allAccounts = await getAccountsList();
+      sortAccounts(allAccounts);
       this.setState({ allAccounts });
     } catch (err) {
       console.log('Could not get user accounts list.');
@@ -57,7 +70,6 @@ class UserAccountManagement extends Component {
   }
 
   render() {
-    const { user } = this.props;
     const { allAccounts } = this.state;
     return (
       <div className="hero-body has-background-white">
@@ -70,12 +82,5 @@ class UserAccountManagement extends Component {
     );
   }
 }
-
-UserAccountManagement.propTypes = {
-  user: PropTypes.object
-};
-UserAccountManagement.defaultProps = {
-  user: null
-};
 
 export default UserAccountManagement;
