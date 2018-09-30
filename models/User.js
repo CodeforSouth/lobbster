@@ -20,7 +20,13 @@ const userSchema = new Schema({
   emailVerified: { type: Boolean, required: true },
   isAdmin: { type: Boolean, required: true }
 }, {
-  runSettersOnQuery: true
+  runSettersOnQuery: true,
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
+});
+
+userSchema.virtual('fullName').get(function() {
+  return `${this.firstName} ${this.lastName}`;
 });
 
 mongoose.model('users', userSchema);
