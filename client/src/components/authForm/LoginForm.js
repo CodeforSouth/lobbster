@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { emailField, passwordField } from './inputFields';
 import authButton from './authButton';
 import requestMonitor from './requestMonitor';
 
@@ -46,22 +47,14 @@ class LoginForm extends Component {
   }
 
   render() {
-    const { emailAddress, password, loginRequestState } = this.state;
+    const { emailAddress, password, loginRequestState, submitRequestStatus } = this.state;
     const isLoginRequestPending = loginRequestState === submitted;
     const loginRequestFailed = loginRequestState === failed;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <div className="field">
-            <div className="control">
-              <input required className="input" type="email" placeholder="Email" name="emailAddress" value={emailAddress} onChange={this.handleChange} />
-            </div>
-          </div>
-          <div className="field">
-            <div className="control">
-              <input required className="input" type="password" placeholder="Password" name="password" value={password} onChange={this.handleChange} />
-            </div>
-          </div>
+          { emailField(emailAddress, 'emailAddress', this.handleChange) }
+          { passwordField(password, 'password', this.handleChange) }
           { authButton('Login', isLoginRequestPending) }
           { requestMonitor('Login Failed', loginRequestFailed) }
           <p className="has-text-grey">

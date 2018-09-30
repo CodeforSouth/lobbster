@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { emailField, passwordField } from './inputFields';
 import authButton from './authButton';
 import requestMonitor from './requestMonitor';
 
@@ -76,16 +77,8 @@ class SignUpForm extends Component {
               <input required className="input" type="text" placeholder="Last Name" name="lastName" value={lastName} onChange={this.handleChange} />
             </div>
           </div>
-          <div className="field">
-            <div className="control">
-              <input required className="input" type="email" placeholder="Email" name="emailAddress" value={emailAddress} onChange={this.handleChange} />
-            </div>
-          </div>
-          <div className="field">
-            <div className="control">
-              <input required className="input" type="password" placeholder="Password" name="password" value={password} onChange={this.handleChange} />
-            </div>
-          </div>
+          { emailField(emailAddress, 'emailAddress', this.handleChange) }
+          { passwordField(password, 'password', this.handleChange) }
           { authButton('Register', isSignupRequestPending) }
           { requestMonitor('Registration Failed', signupRequestFailed) }
         </form>
