@@ -56,7 +56,15 @@ class AuthForm extends Component {
           </ul>
         </div>
         <div id="auth-tab-content" className="">
-          <div className="box" style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0, minHeight: '15rem', marginLeft: 1, marginRight: 1 }}>
+          <div
+          className="box"
+            style={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              marginLeft: 1,
+              marginRight: 1
+            }}
+          >
             <div id="login_tab_content" style={this.contentStyle(loginTab)}>
               <LoginForm updateCurrentUser={updateCurrentUser} />
             </div>
