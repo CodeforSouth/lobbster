@@ -8,9 +8,9 @@ export function noticeBar(noticeList) {
   );
 }
 
-export function verifyEmailNotice() {
+export function verifyEmailNotice(key) {
   return (
-    <div className="notification is-warning">
+    <div key={key} className="notification is-warning">
       <p>
         Please verify your email address by visiting the link sent to it.
       </p>

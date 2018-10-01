@@ -20,7 +20,7 @@ const LobbyistDashboard = ({ user }) => (
       </div>
       <div className="container">
         <section>
-          { !user.emailVerified && noticeBar([verifyEmailNotice()]) }
+          { !user.emailVerified && noticeBar([verifyEmailNotice(1)]) }
         </section>
       </div>
       <div className="container">
