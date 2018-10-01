@@ -5,8 +5,8 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelope, faLock, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchUser, logout } from '../requests/authRequests';
 import { isNonemptyObject } from '../utilities/utilities';
@@ -19,6 +19,7 @@ import EditUserAccount from './userAccountManagement/EditUserAccount';
 
 library.add(faEnvelope);
 library.add(faLock);
+library.add(faExclamationTriangle);
 
 class App extends Component {
   constructor(props) {
