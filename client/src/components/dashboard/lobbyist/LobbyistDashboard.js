@@ -21,7 +21,7 @@ const LobbyistDashboard = ({ user }) => (
       </div>
       <div className="container">
         <section>
-          <ReportsOverview year={2018} />
+          <ReportsOverview selectedYear={2018} yearOptions={[2018, 2017]} />
         </section>
       </div>
     </div>

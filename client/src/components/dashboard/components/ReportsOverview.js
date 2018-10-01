@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 const headerYearSelecton = (selectedYear, yearOptions, handleChange) => (
   <h1 className="title is-2 has-text-black">
     Viewing reports for calendar year
     {' '}
-    <select name="year" value={selectedYear} onChange={handleChange} className="select is-large">
+    <select name="selectedYear" value={selectedYear} onChange={handleChange} className="select is-large">
       { yearOptions.map(year => <option key={year} value={year}>{year}</option>) }
     </select>
   </h1>
@@ -16,7 +16,8 @@ export default class ReportsOverview extends Component {
     super(props);
 
     this.state = {
-      year: props.year
+      selectedYear: props.selectedYear,
+      yearOptions: props.yearOptions
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -37,16 +38,18 @@ export default class ReportsOverview extends Component {
   }
 
   render() {
-    const { year } = this.state;
+    const { selectedYear, yearOptions } = this.state;
     return (
-      headerYearSelecton(year, [2018, 2017], this.handleChange)
+      headerYearSelecton(selectedYear, yearOptions, this.handleChange)
     );
   }
 }
 
 ReportsOverview.propTypes = {
-  year: Number
+  selectedYear: Number,
+  yearOptions: PropTypes.arrayOf(Number)
 };
 ReportsOverview.defaultProps = {
-  year: 0
+  selectedYear: 0,
+  yearOptions: [0]
 };
