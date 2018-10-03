@@ -18,9 +18,17 @@ const userSchema = new Schema({
   },
   passwordHash: { type: String, required: true, select: false },
   emailVerified: { type: Boolean, required: true },
+  isVerified: { type: Boolean, default: false},
   isAdmin: { type: Boolean, required: true }
 }, {
   runSettersOnQuery: true
 });
 
+const tokenSchema = new mongoose.Schema({
+    _userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+    token: { type: String, required: true },
+    createdAt: { type: Date, required: true, default: Date.now, expires: 43200 }
+});
+
 mongoose.model('users', userSchema);
+mongoose.model('token', tokenSchema);
