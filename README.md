@@ -13,6 +13,7 @@ npm run install-dev
    * A URI for accessing a development-specific MongoDB instance.
    * A secret for express-session to use.
 4. Launch the project locally by calling the dev script from the root project directory.
+5. Grant *administrator* status to your first administrator account by manually setting an account's MongoDB *isAdmin* field to *true*. Administrator accounts can grant administrator status to other accounts via *User Account Management*.
 ```
 npm run dev
 ```
