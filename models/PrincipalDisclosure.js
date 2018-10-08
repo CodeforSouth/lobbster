@@ -11,6 +11,12 @@ const Expense = new Schema({
 const Issue = new Schema({
   name: { type: String, required: true },
   expenses: { type: [Expense], required: true }
+}, {
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
+});
+Issue.virtual('totalExpenses').get(function sumIssueExpenses() {
+  return this.expenses.reduce((total, curExpense) => total + curExpense.amount, 0);
 });
 
 const PrincipalDisclosure = new Schema({
@@ -23,7 +29,13 @@ const PrincipalDisclosure = new Schema({
     required: true
   },
   issues: { type: [Issue], required: true }
+}, {
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 });
 PrincipalDisclosure.index({ lobbyistId: 1, principalName: 1, reportingYear: 1 }, { unique: true });
+PrincipalDisclosure.virtual('totalExpenses').get(function sumPrincipalExpenses() {
+  return this.issues.reduce((total, curIssue) => total + curIssue.totalExpenses, 0);
+});
 
 mongoose.model('principal_disclosures', PrincipalDisclosure);
