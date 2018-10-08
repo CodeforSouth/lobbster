@@ -2,27 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { noticeBar, verifyEmailNotice } from '../components/noticeBar';
-import ReportsOverview from '../components/ReportsOverview';
+import DisclosuresOverview from '../components/DisclosuresOverview';
+import discloseNewPrincipalButton from '../components/discloseNewPrincipalButton';
 
 const LobbyistDashboard = ({ user }) => (
   <div className="hero-body has-background-white">
-    <div>
-      <div className="container">
-        <section>
+    <div className="container has-text-left">
+      <div className="column is-10 is-offset-1">
+        <div className="container">
           { !user.emailVerified && noticeBar([verifyEmailNotice(1)]) }
-        </section>
-      </div>
-      <div className="container">
-        <section>
+        </div>
+        <div className="container">
           <p className="has-text-primary">
             You are a Lobbyist!
           </p>
-        </section>
-      </div>
-      <div className="container">
-        <section>
-          <ReportsOverview selectedYear={2018} yearOptions={[2018, 2017]} />
-        </section>
+        </div>
+        <div className="container">
+          <DisclosuresOverview
+            lobbyistId={user.id}
+            selectedYear={2018}
+            yearOptions={[2018, 2017]}
+            includeLobbyistName={false}
+            linkToDisclosure={true}
+          />
+        </div>
+        <div className="container">
+          { discloseNewPrincipalButton() }
+        </div>
       </div>
     </div>
   </div>
