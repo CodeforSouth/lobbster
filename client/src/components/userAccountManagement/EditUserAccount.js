@@ -145,22 +145,24 @@ class EditUserAccount extends Component {
       submitRequestStatus
     } = this.state;
     return (
-      <div className="hero-body has-background-white-ter">
-        <section>
-          <form onSubmit={this.handleSubmit}>
-            {textFeild('Email Address', 'emailAddress', emailAddress, this.handleChange)}
-            {textFeild('First Name', 'firstName', firstName, this.handleChange)}
-            {textFeild('Last Name', 'lastName', lastName, this.handleChange)}
-            {booleanDropdown('Email Address Verified', 'emailVerified', emailVerified, this.handleChange)}
-            {accountTypeDropdown(isAdmin, this.handleChange)}
-            <div className="field is-grouped">
-              {submitButton('Save', submitRequestStatus, this.handleSubmit)}
-              <div className="control">
-                <button type="button" className="button is-light">Cancel</button>
+      <div className="hero-body has-background-white">
+        <div className="container has-text-left">
+          <div className="column is-4 is-offset-1">
+            <form onSubmit={this.handleSubmit}>
+              {textFeild('Email Address', 'emailAddress', emailAddress, this.handleChange)}
+              {textFeild('First Name', 'firstName', firstName, this.handleChange)}
+              {textFeild('Last Name', 'lastName', lastName, this.handleChange)}
+              {booleanDropdown('Email Address Verified', 'emailVerified', emailVerified, this.handleChange)}
+              {accountTypeDropdown(isAdmin, this.handleChange)}
+              <div className="field is-grouped">
+                {submitButton('Save', submitRequestStatus, this.handleSubmit)}
+                <div className="control">
+                  <button type="button" className="button is-light">Cancel</button>
+                </div>
               </div>
-            </div>
-          </form>
-        </section>
+            </form>
+          </div>
+        </div>
       </div>
     );
   }

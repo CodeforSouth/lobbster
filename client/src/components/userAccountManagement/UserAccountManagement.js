@@ -73,10 +73,12 @@ class UserAccountManagement extends Component {
     const { allAccounts } = this.state;
     return (
       <div className="hero-body has-background-white">
-        <div className="container">
-          <section>
-            {accountsTable(allAccounts)}
-          </section>
+        <div className="container has-text-left">
+          <div className="column is-10 is-offset-1">
+            <div className="container">
+              {accountsTable(allAccounts)}
+            </div>
+          </div>
         </div>
       </div>
     );
