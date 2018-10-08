@@ -8,10 +8,11 @@
     "comma-dangle": ["error", "never"],
     "no-else-return": "off",
     "no-confusing-arrow": "off",
+    "no-underscore-dangle": ["off", { "allow": ["_id"] }],
     "react/jsx-filename-extension": "off",
     "react/forbid-prop-types": "off",
     "import/no-extraneous-dependencies": "off",
     "jsx-a11y/label-has-associated-control": off,
-    "jsx-a11y/label-has-for": "off"
+    "jsx-a11y/label-has-for": "off",
   }
 }
