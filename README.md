@@ -163,7 +163,7 @@ This administrator-only page lists all documents that administrators need to app
 * Confirmation step for lobbyists to assent that the information they submit is true.
 * Allow lobbyists to register for their principals.
   * Collect the $150 fee.
-  * Not-for-profit lobbyists will click on “Wave Fee.”
+  * Not-for-profit lobbyists will click on Waive Fee.”
   * Registration is valid until December 31st in the year of registration.
   * Registration will be pending until City staff confirm ‘Not for Profit’ status.
 * Allow lobbyists to submit a withdrawal form at any time to notify the City they are no longer representing a Principal.
