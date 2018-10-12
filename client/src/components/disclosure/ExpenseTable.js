@@ -3,29 +3,6 @@ import PropTypes from 'prop-types';
 
 import ExpenseRow from './ExpenseRow';
 
-function optionFromChange(change) {
-  if (change.toDelete()) {
-    return null;
-  } else if (change.newName()) {
-    return {
-      name: change.newName(),
-      issue: change.issue()
-    };
-  } else {
-    return {
-      name: change.issue().name,
-      issue: change.issue()
-    };
-  }
-}
-
-function blankExpense(defaultIssue) {
-  return {
-    name: '',
-    issue: defaultIssue
-  };
-}
-
 export default class ExpenseTable extends Component {
   constructor(props) {
     super(props);
@@ -34,34 +11,33 @@ export default class ExpenseTable extends Component {
 
   render() {
     const {
-      existingIssuesChanges,
-      newIssues,
-      reRender
+      expenseRenderList,
+      issueOptions,
+      defaultIssue,
+      renameExpense,
+      updateExpenseAmount,
+      changeExpenseIssue,
+      deleteExpense
     } = this.props;
-    const issueOptions = [];
-    existingIssuesChanges.forEach((change) => {
-      const option = optionFromChange(change);
-      if (option) {
-        issueOptions.push(option);
-      }
-    });
-    newIssues.forEach((issue) => {
-      if (issue.name === '') {
-        return;
-      }
-      issueOptions.push({
-        name: issue.name,
-        issue
-      });
-    });
+
     return (
       <div>
         {
-          issueOptions.map((option) => {
-            return option.issue.expenses.map(expense => (
-              <ExpenseRow issue={option.issue} issueOptions={issueOptions} expense={expense} reRender={reRender} />
-            ));
-          })
+          expenseRenderList.map(expense => (
+            <ExpenseRow
+              name={expense.name()}
+              amount={expense.amount()}
+              expenseId={expense.expenseId()}
+              issueId={expense.issueId()}
+              issueOptions={issueOptions}
+              defaultIssue={defaultIssue}
+              renameExpense={renameExpense}
+              updateExpenseAmount={updateExpenseAmount}
+              changeExpenseIssue={changeExpenseIssue}
+              deleteExpense={deleteExpense}
+              key={expense.expenseId()}
+            />
+          ))
         }
       </div>
     );
@@ -69,7 +45,11 @@ export default class ExpenseTable extends Component {
 }
 
 ExpenseTable.propTypes = {
-  existingIssuesChanges: PropTypes.arrayOf(PropTypes.object).isRequired,
-  newIssues: PropTypes.arrayOf(PropTypes.object).isRequired,
-  reRender: PropTypes.func.isRequired
+  expenseRenderList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  issueOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  defaultIssue: PropTypes.object.isRequired,
+  renameExpense: PropTypes.func.isRequired,
+  updateExpenseAmount: PropTypes.func.isRequired,
+  changeExpenseIssue: PropTypes.func.isRequired,
+  deleteExpense: PropTypes.func.isRequired
 };

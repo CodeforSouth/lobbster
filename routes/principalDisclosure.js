@@ -18,7 +18,7 @@ function selectorFromOptionalFields(fieldsObject) {
 
 // This function relies on the Mongoose model enforcing the unique property
 // of entries' (lobbyistId, reportingYear, principalName) triples.
-async function createNewDisclosure(lobbyistId, reportingYear, principalName, issues = []) {
+async function createNewDisclosure(lobbyistId, reportingYear, principalName, feeWaver, issues = []) {
   const disclosure = await new PrincipalDisclosure({
     lobbyistId,
     reportingYear,
@@ -36,7 +36,7 @@ module.exports = (app) => {
   app.use('/api/disclosure/create', requireConcernedUserOrAdmin);
   app.post('/api/disclosure/create', async (req, res) => {
     const {
-      lobbyistId, reportingYear, principalName, issues, feeWaver
+      lobbyistId, reportingYear, principalName, feeWaver, issues
     } = req.body.params;
     try {
       const disclosure = await createNewDisclosure(

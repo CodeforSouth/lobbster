@@ -1,33 +1,72 @@
-export default class Expense {
-  constructor(issue, expense) {
-    this._issue = issue;
-    this._expense = expense;
+let sortIndexCounter = 0;
+
+function nextSortIndex() {
+  sortIndexCounter += 1;
+  return `${sortIndexCounter}`;
+}
+
+export class Expense {
+  constructor(name = '', amount = 0, issueId) {
+    this._sortIndex = nextSortIndex();
+    this._name = '';
+    this._amount = 0;
+    this._issueId = issueId;
+    this.rename(name);
+    this.setAmount(amount);
   }
 
-  issue() {
-    return this._issue;
+  name() {
+    return this._name;
   }
 
-  expense() {
-    return this._expense;
+  amount() {
+    return this._amount;
   }
 
-  newName() {
-    return this._newName;
+  expenseId() {
+    return this._sortIndex;
   }
 
-  setToNoChange() {
-    this._toDelete = false;
-    this._newName = null;
+  sortIndex() {
+    return this._sortIndex;
   }
 
-  setToDelete() {
-    this._toDelete = true;
-    this._newName = null;
+  issueId() {
+    return this._issueId;
   }
 
-  setToRename(newName) {
-    this._toDelete = false;
-    this._newName = newName;
+  isBlank() {
+    return this.name() === '' && this.amount() === 0;
   }
+
+  rename(newName) {
+    if (typeof newName === 'string') {
+      this._name = newName;
+    } else {
+      this._name = '';
+    }
+  }
+
+  setAmount(amount) {
+    if (typeof amount === 'number') {
+      this._amount = amount;
+    } else {
+      this._amount = 0;
+    }
+  }
+
+  setIssueId(issueId) {
+    this._issueId = issueId;
+  }
+
+  makeMongoExpense() {
+    return {
+      name: this.name(),
+      amount: this.amount()
+    };
+  }
+}
+
+export function sortExpenses(expenses) {
+  expenses.sort((a, b) => (parseInt(a.sortIndex(), 10) - parseInt(b.sortIndex(), 10)));
 }

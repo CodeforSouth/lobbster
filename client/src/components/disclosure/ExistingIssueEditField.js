@@ -27,79 +27,81 @@ export class ExistingIssueEditField extends Component {
     this.selectRenaming = this.selectRenaming.bind(this);
   }
 
-  handleChange({ target }) {
-    const { issueChange, reRender } = this.props;
-    if (target.name === 'updatedValue') {
-      issueChange.setToRename(target.value);
-      reRender();
-    }
-  }
-
   fieldIdentifier() {
-    const { issueChange } = this.props;
-    return `issue_${issueChange.issue().name}`;
+    const { issueId } = this.props;
+    return issueId;
   }
 
   renameMessage() {
-    const { issueChange } = this.props;
-    const valueBefore = issueChange.issue().name;
-    const updatedValue = issueChange.newName();
-    if (valueBefore === updatedValue) {
-      return '';
-    } else {
+    const { isRename, pendingName, originalName } = this.props;
+    if (isRename) {
       return (
         <p>
           Renaming
           {' '}
-          <em>{valueBefore}</em>
+          <em>{originalName}</em>
           {' '}
           to
           {' '}
-          <em>{updatedValue}</em>
+          <em>{pendingName}</em>
           .
         </p>
       );
+    } else {
+      return '';
     }
   }
 
   deleteMessage() {
-    const { issueChange } = this.props;
+    const { isDelete, originalName } = this.props;
     const style = {
       marginLeft: '.6em',
       marginTop: '1.11em',
       marginBottom: '1.11em'
     };
-    return (
-      <div style={style}>
-        Deleting
-        {' '}
-        <em>{issueChange.issue().name}</em>
-        .
-      </div>
-    );
+    if (isDelete) {
+      return (
+        <div style={style}>
+          Deleting
+          {' '}
+          <em>{originalName}</em>
+          .
+        </div>
+      );
+    } else {
+      return '';
+    }
+  }
+
+  handleChange({ target }) {
+    const { issueId, renameIssue } = this.props;
+    if (target.name === 'updatedValue') {
+      renameIssue(issueId, target.value);
+    }
   }
 
   selectDefault() {
-    const { issueChange } = this.props;
-    issueChange.setToNoChange();
+    const { issueId, resetIssue } = this.props;
+    resetIssue(issueId);
     this.setState({ fieldState: fieldStates.default });
   }
 
   selectDeleting() {
-    const { issueChange } = this.props;
-    issueChange.setToDelete();
+    const { issueId, deleteIssue } = this.props;
+    deleteIssue(issueId);
     this.setState({ fieldState: fieldStates.deleting });
   }
 
   selectRenaming() {
-    const { issueChange } = this.props;
-    issueChange.setToRename(issueChange.issue().name);
     this.setState({ fieldState: fieldStates.renaming });
   }
 
-  deleteButton() {
+  deleteButton(selected = false) {
+    const onClickMethod = selected ? this.selectDefault : this.selectDeleting;
+    const style = selected ? selectedButtonStyle : { };
+    const tooltip = selected ? 'Cancel Delete' : 'Delete Issue';
     return (
-      <div to="/" className="button tooltip" data-tooltip="Delete Issue" onClick={this.selectDeleting}>
+      <div to="/" className="button tooltip" data-tooltip={tooltip} onClick={onClickMethod} style={style}>
         <span className="icon">
           <FontAwesomeIcon icon="trash" />
         </span>
@@ -121,8 +123,7 @@ export class ExistingIssueEditField extends Component {
   }
 
   renderDefault() {
-    const { issueChange } = this.props;
-    const value = issueChange.newName() || issueChange.issue().name;
+    const { pendingName } = this.props;
     return (
       <div className="field is-grouped">
         <div className="control">
@@ -133,7 +134,7 @@ export class ExistingIssueEditField extends Component {
             style={{ border: 'none', background: 'transparent' }}
             id={this.fieldIdentifier()}
             name="updatedValue"
-            value={value}
+            value={pendingName}
           />
         </div>
         { this.renameButton() }
@@ -143,7 +144,7 @@ export class ExistingIssueEditField extends Component {
   }
 
   renderRename() {
-    const { issueChange } = this.props;
+    const { pendingName } = this.props;
     const style = {
       marginTop: '.7em',
       marginBottom: '.7em'
@@ -158,7 +159,7 @@ export class ExistingIssueEditField extends Component {
               type="text"
               id={this.fieldIdentifier()}
               name="updatedValue"
-              value={issueChange.newName()}
+              value={pendingName}
               onChange={this.handleChange}
             />
           </div>
@@ -170,7 +171,13 @@ export class ExistingIssueEditField extends Component {
   }
 
   renderDelete() {
-    return this.deleteMessage();
+    return (
+      <div>
+        { this.deleteMessage() }
+        { this.renameButton(false) }
+        { this.deleteButton(true) }
+      </div>
+    );
   }
 
   render() {
@@ -187,6 +194,12 @@ export class ExistingIssueEditField extends Component {
 }
 
 ExistingIssueEditField.propTypes = {
-  issueChange: PropTypes.object.isRequired,
-  reRender: PropTypes.func.isRequired
+  issueId: PropTypes.string.isRequired,
+  isDelete: PropTypes.bool.isRequired,
+  isRename: PropTypes.bool.isRequired,
+  pendingName: PropTypes.string.isRequired,
+  originalName: PropTypes.string.isRequired,
+  renameIssue: PropTypes.func.isRequired,
+  deleteIssue: PropTypes.func.isRequired,
+  resetIssue: PropTypes.func.isRequired
 };

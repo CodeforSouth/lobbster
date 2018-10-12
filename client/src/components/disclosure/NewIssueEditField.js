@@ -9,16 +9,15 @@ export default class NewIssueEditField extends Component {
   }
 
   handleChange({ target }) {
-    const { issue, reRender } = this.props;
+    const { sortIndex, renameIssue } = this.props;
     if (target.name === 'newIssue') {
-      issue.name = target.value;
-      reRender();
+      renameIssue(sortIndex, target.value);
     }
   }
 
   addMessage() {
-    const { issue } = this.props;
-    if (issue.name) {
+    const { issueName } = this.props;
+    if (issueName.name) {
       return <div>New Issue</div>;
     } else {
       return <div />;
@@ -26,7 +25,7 @@ export default class NewIssueEditField extends Component {
   }
 
   render() {
-    const { issue } = this.props;
+    const { issueName } = this.props;
     const style = {
       marginTop: '.7em',
       marginBottom: '.7em'
@@ -40,7 +39,7 @@ export default class NewIssueEditField extends Component {
               type="text"
               name="newIssue"
               placeholder="New Issue"
-              value={issue.name}
+              value={issueName}
               onChange={this.handleChange}
             />
           </div>
@@ -52,6 +51,7 @@ export default class NewIssueEditField extends Component {
 }
 
 NewIssueEditField.propTypes = {
-  issue: PropTypes.object.isRequired,
-  reRender: PropTypes.func.isRequired
+  sortIndex: PropTypes.string.isRequired,
+  issueName: PropTypes.string.isRequired,
+  renameIssue: PropTypes.func.isRequired
 };
