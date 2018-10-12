@@ -1,72 +1,72 @@
-let sortIndexCounter = 0;
+// Expense categories matching the MongoDB enum.
+export const expenseCategories = [
+  'Food & Beverage',
+  'Enternatinment',
+  'Research',
+  'Communications',
+  'Media/Advertising',
+  'Publications',
+  'Travel',
+  'Lodging',
+  'Special Events',
+  'Other'
+];
 
-function nextSortIndex() {
-  sortIndexCounter += 1;
-  return `${sortIndexCounter}`;
+function categoryIsValid(category) {
+  return expenseCategories.indexOf(category) > -1;
 }
 
+function amountIsValid(amountString) {
+  // Regex for positive floats with up to two decimal places.
+  const regex = /^\s*[1-9]\d*(\.\d{0,2})?\s*$/;
+  return amountString === '' || regex.test(amountString);
+}
+
+const defaultCategory = expenseCategories[0];
+
 export class Expense {
-  constructor(name = '', amount = 0, issueId) {
-    this._sortIndex = nextSortIndex();
-    this._name = '';
-    this._amount = 0;
-    this._issueId = issueId;
-    this.rename(name);
+  constructor(category = defaultCategory, amount = '') {
+    this._category = defaultCategory;
+    this._amount = '';
+    this.setCategory(category);
     this.setAmount(amount);
   }
 
-  name() {
-    return this._name;
+  category() {
+    return this._category;
   }
 
   amount() {
     return this._amount;
   }
 
-  expenseId() {
-    return this._sortIndex;
-  }
-
-  sortIndex() {
-    return this._sortIndex;
-  }
-
-  issueId() {
-    return this._issueId;
+  amountAsFloat() {
+    return parseFloat(this._amount) || 0;
   }
 
   isBlank() {
-    return this.name() === '' && this.amount() === 0;
+    return this.amountAsFloat() === 0;
   }
 
-  rename(newName) {
-    if (typeof newName === 'string') {
-      this._name = newName;
+  setCategory(category) {
+    if (categoryIsValid(category)) {
+      this._category = category;
     } else {
-      this._name = '';
+      this._category = defaultCategory;
     }
   }
 
   setAmount(amount) {
-    if (typeof amount === 'number') {
-      this._amount = amount;
-    } else {
-      this._amount = 0;
+    const amountString = amount === 0 ? '' : `${amount}`;
+    if (amountIsValid(amountString)) {
+      this._amount = amountString;
     }
-  }
-
-  setIssueId(issueId) {
-    this._issueId = issueId;
   }
 
   makeMongoExpense() {
     return {
-      name: this.name(),
-      amount: this.amount()
+      category: this.category(),
+      amount: this.amountAsFloat()
     };
   }
-}
-
-export function sortExpenses(expenses) {
-  expenses.sort((a, b) => (parseInt(a.sortIndex(), 10) - parseInt(b.sortIndex(), 10)));
 }

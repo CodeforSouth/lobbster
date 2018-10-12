@@ -6,14 +6,13 @@ import { cloneDeep } from 'lodash';
 
 import { ExistingIssueUpdate, sortExistingIssueUpdates } from './ExistingIssueUpdate';
 import { NewIssue, sortNewIssues } from './NewIssue';
-import { Expense, sortExpenses } from './Expense';
 
 import { createNewDisclosure, fetchDisclosure, modifyDisclosure } from '../../requests/disclosures';
 
 import { requestStates, submitButton } from '../uiElements/submitButton';
 import textField from '../uiElements/textField';
 import IssuesEditList from './IssuesEditList';
-import ExpenseTable from './ExpenseTable';
+import ExpenseReportView from './ExpenseReportView';
 
 export const editDisclosureModes = {
   editExisting: 1,
@@ -28,36 +27,25 @@ export const feeWaverValues = {
   denied: 'denied'
 };
 
-function reconcileIssues(issueUpdates, newIssues, expenses) {
-  // Remove blanks.
+function reconcileIssues(issueUpdates, newIssues) {
+  // Remove deleted and blank issues.
   const updatedIssues = issueUpdates.filter(update => !update.isDelete());
   const processedNewIssues = newIssues.filter(issue => !issue.isBlank());
-  const reconciledIssues = cloneDeep([...updatedIssues, ...processedNewIssues]);
-  for (let i = 0; i < reconciledIssues.length; i += 1) {
-    reconciledIssues[i].expenses = [];
-  }
+  console.log(newIssues);
+  console.log(processedNewIssues);
 
-  expenses.forEach((expense) => {
-    reconciledIssues.forEach((issue) => {
-      if (expense.issueId() === issue.issueId()) {
-        issue.expenses.push(expense.makeMongoExpense());
-      }
-    });
-  });
-
-  for (let i = 0; i < reconciledIssues.length; i += 1) {
-    let issue = reconciledIssues[i];
-    const expensesRef = issue.expenses;
-    issue = issue.mongoReadyIssue();
-    issue.expenses = expensesRef;
-    reconciledIssues[i] = issue;
-  }
+  // Convert issues and their internal records into objects ready for MongoDB.
+  const reconciledIssues = cloneDeep([...updatedIssues, ...processedNewIssues])
+    .map(issue => issue.makeMongoIssue());
+  console.log(reconciledIssues);
 
   return reconciledIssues;
 }
 
 function getIssueOptions(issuesList) {
-  return cloneDeep(issuesList).filter(issue => issue.name() !== '');
+  return cloneDeep(issuesList)
+    .filter(issue => issue.isBlank ? !issue.isBlank() : true)
+    .filter(issue => issue.isDelete ? !issue.isDelete() : true);
 }
 
 function disclosureState(
@@ -70,18 +58,7 @@ function disclosureState(
   disclosureId = '',
   submitRequestStatus = requestStates.initial
 ) {
-  // updatedExistingIssues starts out as a copy of the existingIssues
-  const updatedExistingIssues = [];
-  existingIssues.forEach(issue => updatedExistingIssues.push(new ExistingIssueUpdate(issue)));
-
-  const expenses = [];
-  existingIssues.forEach(issue => issue.expenses.forEach((expense) => {
-    expenses.push(new Expense(
-      expense.name,
-      expense.amount,
-      issue._id
-    ));
-  }));
+  const updatedExistingIssues = existingIssues.map(issue => new ExistingIssueUpdate(issue));
 
   return {
     mode,
@@ -91,15 +68,8 @@ function disclosureState(
     newIssues,
     feeWaver,
     disclosureId,
-    expenses,
     submitRequestStatus
   };
-}
-
-const defaultIssue = new NewIssue('--');
-
-function makeBlankExpense() {
-  return new Expense('', '', defaultIssue.issueId());
 }
 
 export class EditDisclosure extends Component {
@@ -119,10 +89,7 @@ export class EditDisclosure extends Component {
     this.deleteIssue = this.deleteIssue.bind(this);
     this.renameIssue = this.renameIssue.bind(this);
 
-    this.renameExpense = this.renameExpense.bind(this);
-    this.updateExpenseAmount = this.updateExpenseAmount.bind(this);
-    this.changeExpenseIssue = this.changeExpenseIssue.bind(this);
-    this.deleteExpense = this.deleteExpense.bind(this);
+    this.setExpenseAmount = this.setExpenseAmount.bind(this);
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -151,7 +118,28 @@ export class EditDisclosure extends Component {
       }
     }
     this.manageBlankNewIssues();
-    this.manageBlankExpenses();
+  }
+
+  setExpenseAmount(issueId, category, amount) {
+    const { updatedExistingIssues } = this.state;
+    for (let i = 0; i < updatedExistingIssues.length; i += 1) {
+      const updatedIssue = updatedExistingIssues[i];
+      if (updatedIssue.issueId() === issueId) {
+        updatedIssue.setAmount(category, amount);
+        this.setState({ updatedExistingIssues });
+        return;
+      }
+    }
+    const { newIssues } = this.state;
+    for (let i = 0; i < newIssues.length; i += 1) {
+      const issue = newIssues[i];
+      if (issue.sortIndex() === issueId) {
+        issue.setAmount(category, amount);
+        this.setState({ newIssues });
+        this.manageBlankNewIssues(issue.issueId());
+        return;
+      }
+    }
   }
 
   handleChange({ target }) {
@@ -182,26 +170,6 @@ export class EditDisclosure extends Component {
       newIssuesCopy.push(new NewIssue());
     }
     this.setState({ newIssues: newIssuesCopy });
-  }
-
-  // Just like manageBlankNewIssues.
-  manageBlankExpenses(preserveId = null) {
-    const { expenses } = this.state;
-    let expensesCopy = cloneDeep(expenses);
-
-    // Get the expenses in order by Id.
-    sortExpenses(expensesCopy);
-
-    // Remove blanks.
-    expensesCopy = expensesCopy.filter(
-      expense => (expense.expenseId() === preserveId) || !expense.isBlank()
-    );
-
-    // Ensure a blank new issue is at the end.
-    if (expensesCopy.length === 0 || !expensesCopy[expensesCopy.length - 1].isBlank()) {
-      expensesCopy.push(makeBlankExpense());
-    }
-    this.setState({ expenses: expensesCopy });
   }
 
   renameIssue(issueId, newName) {
@@ -259,56 +227,6 @@ export class EditDisclosure extends Component {
     }
   }
 
-  renameExpense(expenseId, newName) {
-    const { expenses } = this.state;
-    for (let i = 0; i < expenses.length; i += 1) {
-      const expense = expenses[i];
-      if (expense.expenseId() === expenseId) {
-        expense.rename(newName);
-        this.setState({ expenses });
-        this.manageBlankExpenses(expenseId);
-        return;
-      }
-    }
-  }
-
-  updateExpenseAmount(expenseId, amount) {
-    const { expenses } = this.state;
-    for (let i = 0; i < expenses.length; i += 1) {
-      const expense = expenses[i];
-      if (expense.expenseId() === expenseId) {
-        expense.setAmount(amount);
-        this.setState({ expenses });
-        this.manageBlankExpenses(expenseId);
-        return;
-      }
-    }
-  }
-
-  changeExpenseIssue(expenseId, newIssueId) {
-    const { expenses } = this.state;
-    for (let i = 0; i < expenses.length; i += 1) {
-      const expense = expenses[i];
-      if (expense.expenseId() === expenseId) {
-        expense.setIssueId(newIssueId);
-        this.setState({ expenses });
-        return;
-      }
-    }
-  }
-
-  deleteExpense(expenseId) {
-    const { expenses } = this.state;
-    for (let i = 0; i < expenses.length; i += 1) {
-      const expense = expenses[i];
-      if (expense.expenseId() === expenseId) {
-        expenses.splice(i, 1);
-        this.setState({ expenses });
-        return;
-      }
-    }
-  }
-
   async handleSubmit(e) {
     e.preventDefault();
 
@@ -358,16 +276,8 @@ export class EditDisclosure extends Component {
     return [...updatedExistingIssuesCopy, ...newIssuesCopy];
   }
 
-  makeExpenseRenderList() {
-    const { expenses } = this.state;
-    const expensesCopy = cloneDeep(expenses);
-    sortExpenses(expensesCopy);
-    return expensesCopy;
-  }
-
   render() {
     const issueRenderList = this.makeIssueRenderList();
-    const expenseRenderList = this.makeExpenseRenderList();
     const {
       principalName,
       reportingYear,
@@ -396,16 +306,19 @@ export class EditDisclosure extends Component {
               deleteIssue={this.deleteIssue}
               resetIssue={this.resetIssue}
             />
-            <label className="label" htmlFor="expenses">Expenses</label>
-            <ExpenseTable
-              expenseRenderList={expenseRenderList}
-              issueOptions={issueOptions}
-              defaultIssue={defaultIssue}
-              renameExpense={this.renameExpense}
-              updateExpenseAmount={this.updateExpenseAmount}
-              changeExpenseIssue={this.changeExpenseIssue}
-              deleteExpense={this.deleteExpense}
-            />
+            { issueOptions.map(issue => (
+              <ExpenseReportView
+                issueName={issue.name()}
+                issueId={issue.issueId()}
+                key={issue.issueId()}
+                expenseReport={issue.expenseReport()}
+                setExpenseAmount={this.setExpenseAmount}
+                showPrincipalName
+                showYear
+                principalName={principalName}
+                year={reportingYear}
+              />
+            )) }
             <div className="field is-grouped">
               {submitButton('Save', submitRequestStatus, this.handleSubmit)}
               <Link to="/">

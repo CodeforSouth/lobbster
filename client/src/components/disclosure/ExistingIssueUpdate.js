@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+import ExpenseReport from './ExpenseReport';
 
 let sortIndexCounter = 0;
 
@@ -10,6 +11,7 @@ function nextSortIndex() {
 export class ExistingIssueUpdate {
   constructor(originalVersion) {
     this._originalVersion = cloneDeep(originalVersion);
+    this._expenseReport = new ExpenseReport(originalVersion.expenseReport.expenses);
     this.reset();
     this._sortIndex = nextSortIndex();
   }
@@ -21,6 +23,14 @@ export class ExistingIssueUpdate {
 
   delete() {
     this._issueIsDeleted = true;
+  }
+
+  setAmount(category, amount) {
+    this._expenseReport.setAmount(category, amount);
+  }
+
+  expenseReport() {
+    return cloneDeep(this._expenseReport);
   }
 
   rename(newName) {
@@ -62,9 +72,10 @@ export class ExistingIssueUpdate {
     return this._sortId;
   }
 
-  mongoReadyIssue() {
+  makeMongoIssue() {
     return {
-      name: this.pendingName()
+      name: this.pendingName(),
+      expenseReport: this._expenseReport.makeMongoExpenseReport()
     };
   }
 }

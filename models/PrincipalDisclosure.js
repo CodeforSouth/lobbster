@@ -3,20 +3,56 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
+const expenseCategories = [
+  'Food & Beverage',
+  'Enternatinment',
+  'Research',
+  'Communications',
+  'Media/Advertising',
+  'Publications',
+  'Travel',
+  'Lodging',
+  'Special Events',
+  'Other'
+];
+
 const Expense = new Schema({
-  name: { type: String, required: true },
+  category: {
+    type: String,
+    enum: expenseCategories,
+    required: true
+  },
   amount: { type: Number, required: true }
+});
+
+const ExpenseReport = new Schema({
+  expenses: {
+    type: [Expense],
+    default: [
+      { category: expenseCategories[0], amount: 0 },
+      { category: expenseCategories[1], amount: 0 },
+      { category: expenseCategories[2], amount: 0 },
+      { category: expenseCategories[3], amount: 0 },
+      { category: expenseCategories[4], amount: 0 },
+      { category: expenseCategories[5], amount: 0 },
+      { category: expenseCategories[6], amount: 0 },
+      { category: expenseCategories[7], amount: 0 },
+      { category: expenseCategories[8], amount: 0 },
+      { category: expenseCategories[9], amount: 0 }
+    ],
+    required: true
+  }
 });
 
 const Issue = new Schema({
   name: { type: String, required: true },
-  expenses: { type: [Expense], required: true }
+  expenseReport: { type: ExpenseReport, required: true }
 }, {
   toObject: { virtuals: true },
   toJSON: { virtuals: true }
 });
 Issue.virtual('totalExpenses').get(function sumIssueExpenses() {
-  return this.expenses.reduce((total, curExpense) => total + curExpense.amount, 0);
+  return this.expenseReport.expenses.reduce((total, curExpense) => total + curExpense.amount, 0);
 });
 
 const PrincipalDisclosure = new Schema({
