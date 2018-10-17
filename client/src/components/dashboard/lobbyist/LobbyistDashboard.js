@@ -15,8 +15,6 @@ const LobbyistDashboard = ({ user }) => (
         <div className="container">
           <DisclosuresOverview
             lobbyistId={user.id}
-            selectedYear={2018}
-            yearOptions={[2018, 2017]}
             includeLobbyistName={false}
             linkToDisclosure={true}
           />
