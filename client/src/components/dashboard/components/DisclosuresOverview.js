@@ -78,7 +78,7 @@ const disclosureRow = (
     if (linkToDisclosure) {
       principalTd = (
         <td className="has-text-link" style={tdTextStyle}>
-          <Link to={`/disclosure/edit/${disclosureId}`}>
+          <Link to={`/disclosure/view/${disclosureId}`}>
             { principalName }
           </Link>
         </td>
