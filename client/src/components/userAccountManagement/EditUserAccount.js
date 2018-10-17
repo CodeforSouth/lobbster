@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { getAccountDetails, modifyAccountDetails } from '../../requests/userManagement';
+import { fetchPaymentsDocumentation, updatePaymentsDocumentation } from '../../requests/paymentDocumentation';
+
 import { requestStates, submitButton } from '../uiElements/submitButton';
 
 
@@ -67,6 +69,87 @@ const accountTypeDropdown = (isAdmin, handleChange) => {
   );
 };
 
+// Reflects the MongoDB enum.
+const paymentStatusOptions = [
+  ' ',
+  'action_needed',
+  'payment_pending',
+  'paid',
+  'exemption_requested',
+  'exemption_approved',
+  'exemption_rejected'
+];
+
+const paymentStatusLabels = {
+  action_needed: 'Action Needed',
+  payment_pending: 'Payment Pending',
+  paid: 'Paid',
+  exemption_requested: 'Non-Profit Exemption Requested',
+  exemption_approved: 'Non-Profit Exemption Approved',
+  exemption_rejected: 'Non-Profit Exemption Rejected'
+};
+paymentStatusLabels[' '] = '-';
+
+const paymentDocumentationRow = (doc, onPaymentDocChange) => (
+  <tr key={doc.forYear}>
+    <td>{doc.forYear}</td>
+    <td>
+      <div className="control">
+        <input
+          className="input"
+          type="text"
+          placeholder="Amount (USD)"
+          name={`amountPaid_${doc.forYear}`}
+          value={doc.amountPaid || ''}
+          onChange={onPaymentDocChange}
+        />
+      </div>
+    </td>
+    <td>
+      <div className="control">
+        <div className="select" id={`status_${doc.forYear}`}>
+          <select name={`status_${doc.forYear}`} value={doc.status} onChange={onPaymentDocChange}>
+            {paymentStatusOptions.map(
+              status => <option key={status} value={status}>{paymentStatusLabels[status]}</option>
+            )}
+          </select>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div className="control">
+        <input
+          className="input"
+          type="date"
+          placeholder="-"
+          name={`effectiveDate_${doc.forYear}`}
+          value={`${doc.effectiveDate}`.split('T')[0] || ''}
+          onChange={onPaymentDocChange}
+        />
+      </div>
+    </td>
+  </tr>
+);
+
+const paymentsDocumentationTable = (paymentsDocumentation, onPaymentDocChange) => (
+  <div>
+    <label className="label">Payment Records</label>
+    <table className="table">
+      <thead>
+        <tr key="head">
+          <th>Calendar Year</th>
+          <th>Amount Paid</th>
+          <th>Status</th>
+          <th>Effective Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {paymentsDocumentation.map(doc => paymentDocumentationRow(doc, onPaymentDocChange))}
+      </tbody>
+    </table>
+  </div>
+);
+
 class EditUserAccount extends Component {
   constructor(props) {
     super(props);
@@ -77,10 +160,12 @@ class EditUserAccount extends Component {
       lastName: null,
       emailVerified: null,
       isAdmin: null,
+      paymentsDocumentation: [],
       submitRequestStatus: requestStates.initial
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.onPaymentDocChange = this.onPaymentDocChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -89,10 +174,27 @@ class EditUserAccount extends Component {
     const { emailAddress } = match.params;
     try {
       const userToEdit = await getAccountDetails(emailAddress) || { };
+      const paymentsDocumentation = await fetchPaymentsDocumentation(userToEdit._id) || [];
       this.setState({ ...userToEdit });
+      this.setState({ paymentsDocumentation });
     } catch (err) {
       console.log('Error getting account info.');
     }
+  }
+
+  onPaymentDocChange({ target }) {
+    const { paymentsDocumentation } = this.state;
+    const propertyName = target.name.split('_')[0];
+    const year = parseInt(target.name.split('_')[1], 10);
+    paymentsDocumentation.forEach((doc) => {
+      if (doc.forYear === year) {
+        doc[propertyName] = target.value;
+        if (propertyName === 'amountPaid' && target.value === '') {
+          doc.amountPaid = 0;
+        }
+      }
+    });
+    this.setState({ paymentsDocumentation });
   }
 
   handleChange({ target }) {
@@ -117,7 +219,8 @@ class EditUserAccount extends Component {
       lastName,
       emailAddress,
       emailVerified,
-      isAdmin
+      isAdmin,
+      paymentsDocumentation
     } = this.state;
     try {
       this.setState({ submitRequestStatus: requestStates.submitted });
@@ -129,6 +232,8 @@ class EditUserAccount extends Component {
         emailVerified,
         isAdmin
       );
+      const updatedPaymentsDocs = await updatePaymentsDocumentation(paymentsDocumentation);
+      this.setState({ paymentsDocumentation: updatedPaymentsDocs });
       this.setState({ submitRequestStatus: requestStates.succeeded });
     } catch (err) {
       this.setState({ submitRequestStatus: requestStates.failed });
@@ -142,6 +247,7 @@ class EditUserAccount extends Component {
       lastName,
       emailVerified,
       isAdmin,
+      paymentsDocumentation,
       submitRequestStatus
     } = this.state;
     return (
@@ -154,11 +260,14 @@ class EditUserAccount extends Component {
               {textFeild('Last Name', 'lastName', lastName, this.handleChange)}
               {booleanDropdown('Email Address Verified', 'emailVerified', emailVerified, this.handleChange)}
               {accountTypeDropdown(isAdmin, this.handleChange)}
+              {paymentsDocumentationTable(paymentsDocumentation, this.onPaymentDocChange)}
               <div className="field is-grouped">
                 {submitButton('Save', submitRequestStatus, this.handleSubmit)}
-                <div className="control">
-                  <button type="button" className="button is-light">Cancel</button>
-                </div>
+                <a href="/user-account-management">
+                  <button type="button" className="button is-light">
+                    <span>Cancel</span>
+                  </button>
+                </a>
               </div>
             </form>
           </div>
