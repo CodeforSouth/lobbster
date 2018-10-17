@@ -16,3 +16,8 @@ export const updatePaymentsDocumentation = async (updatedDocs) => {
   );
   return response.data;
 };
+
+export const fetchYears = async () => {
+  const response = await axios.get('/api/reporting_years');
+  return response.data;
+};
