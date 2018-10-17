@@ -13,13 +13,6 @@ const AdminDashboard = ({ user }) => (
               { !user.emailVerified && noticeBar([verifyEmailNotice(1)]) }
             </section>
           </div>
-          <div className="container">
-            <section>
-              <p className="has-text-primary">
-                You are an admin!
-              </p>
-            </section>
-          </div>
         </div>
       </div>
     </div>

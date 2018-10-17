@@ -13,11 +13,6 @@ const LobbyistDashboard = ({ user }) => (
           { !user.emailVerified && noticeBar([verifyEmailNotice(1)]) }
         </div>
         <div className="container">
-          <p className="has-text-primary">
-            You are a Lobbyist!
-          </p>
-        </div>
-        <div className="container">
           <DisclosuresOverview
             lobbyistId={user.id}
             selectedYear={2018}
