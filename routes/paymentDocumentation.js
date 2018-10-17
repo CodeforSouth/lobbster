@@ -103,9 +103,8 @@ module.exports = (app) => {
     } = req.query;
     try {
       const paymentsDocumentation = await getPaymentsDocumentation(accountId);
-      res.status(200).json(paymentsDocumentation).send();
+      res.status(200).json(paymentsDocumentation);
     } catch (error) {
-      console.log(error);
       console.log('Error finding payment documentation.');
       res.status(502).send();
     }
@@ -139,7 +138,7 @@ module.exports = (app) => {
   app.get('/api/reporting_years', async (req, res) => {
     try {
       const yearInfo = await getYears();
-      res.status(200).json(yearInfo).send();
+      res.status(200).json(yearInfo);
     } catch (error) {
       console.log('Error getting reporting year info.')
       res.status(502).send();
