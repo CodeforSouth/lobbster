@@ -21,6 +21,7 @@ import { isNonemptyObject } from '../utilities/utilities';
 import Dashboard from './dashboard/Dashboard';
 import Landing from './Landing';
 import Navbar from './navigation/Navbar';
+import MyPayments from './myPayments/MyPayments';
 import UserAccountManagement from './userAccountManagement/UserAccountManagement';
 import EditUserAccount from './userAccountManagement/EditUserAccount';
 import { EditDisclosure, editDisclosureModes } from './disclosure/EditDisclosure';
@@ -143,6 +144,15 @@ class App extends Component {
                 {...props}
                 user={currentUser}
                 userIsAuthenticated={userIsAuthenticated}
+              />
+            )}
+          />
+          <Route
+            path="/payments"
+            exact
+            render={props => (
+              <MyPayments
+                {...props}
               />
             )}
           />
