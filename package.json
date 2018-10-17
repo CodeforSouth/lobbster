@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "Lobbster is an open-source project to help lobbyists comply with reporting requirements for the City of Coral Gables.",
   "main": "index.js",
+  "engines": {
+    "node": "8.9.4",
+    "npm": "5.7.1"
+  },
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install-dev": "npm install && npm install --prefix client"
+    "install-dev": "npm install && npm install --prefix client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -39,7 +44,7 @@
     "npm": "^6.4.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
     "stripe": "^6.12.1"
   },
   "devDependencies": {
