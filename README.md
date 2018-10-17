@@ -12,6 +12,8 @@ npm run install-dev
 3. Create a dev-keys.js file in the config directory. It should be just like prod-keys.js, but with your values in place of the process.env ones. You will need:
    * A URI for accessing a development-specific MongoDB instance.
    * A secret for express-session to use.
+   * A publishable key from Stripe.
+   * A secret key from Stripe.
 4. Launch the project locally by calling the dev script from the root project directory.
 5. Grant *administrator* status to your first administrator account by manually setting an account's MongoDB *isAdmin* field to *true*. Administrator accounts can grant administrator status to other accounts via *User Account Management*.
 ```
@@ -38,122 +40,24 @@ Section 2-243 of the _Code of the City of Coral Gables_ creates requirements for
 
 Most of the forms require that the lobbyist sign a statement agreeing to some terms, or swearing under oath that the information on the form is correct.
 
-### City Clerk Responsibilities
-* Approve lobbyist registration and issue applications.
-* Verify the identities of the people who submit applications and expenditure reports.
-* Collect lobbyist fees---and presumably, return fees that are paid by mistake.
-* Maintain the records that are submitted.
-* Prepare and publish reports on lobbying activity.
+### City Responsibilities
+* Publish reported data.
+* Collect payments.
+* Approve non-profit exemptions.
 
 ---
 
 ## Application Design
 
-### Account Types / Access Levels
-All user accounts have one of two types. An account's type determines what parts of the API the account can use, as well as what views to display.
-* _Lobbyist_ - The default account type. Designed for fulfilling lobbyist requirements. All accounts start out with this type when they are created.
-* _Administrator_ - Designed for fulfilling City Clerk duties. Has more permissions than a lobbyist account.
-    * Administrator accounts can convert other accounts to or from administrator accounts; this is how administrator accounts are made.
-    * Creating an initial administrator account is a crucial step in the deployment process.
+### Lobbyists and Administrators
+Each user account is either a *lobbyist* account or an *administrator* account. This status grants different levels of API access, and controls what parts of the UI are rendered.
+* _Lobbyist_ - The default account type. All accounts start out with this type when they are created.
+* _Administrator_ - Has more permissions than a lobbyist account.
+    * During deployment, the first administrator account is created by changing the account type in the database.
+    * Administrator accounts can change an account's type in *User Account Management*.
 
-In addition to having an account type, accounts have a status of whether or not their email address has been verified by clicking on the linnk that is sent to their email address. Accounts that do not have a verified email address are only able to resend verification links to their email address.
-
-### Functionality
-
-#### Account Creation
-Anybody on the Internet can create a user account by submitting an email as a username, along with a password. The user will need to visit a verification link sent to the account's email address before the account will be able to do anything useful. If the account needs to have administrator access, another administrator account will need to grant it.
-
-#### Password Resets
-If a user forgets their password, they can have a password reset link sent to their email address.
-
-#### Identity Verification
-
-Only an administrator account is able to mark an account as having its user's identity verified.
-
-The process for an administrator to verify a lobbyist's identity has not been determined. It seems like this step could be a one-time thing.
-
-#### Lobbyist Document Submission
-
-Lobbyist accounts can fill out and submit forms that fulfill their reporting requirements.
-
-A form will automatically be saved as a draft that can be reopened and resumed later. The draft will exist until the form is submitted or deleted.
-
-The lobbyist registration application sometimes requires a payment to clear as a step in its submission; submitting the form will fail if the payment fails.
-
-All submitted forms have a status of _pending review_, until an administrator account changes the status to _approved_ or _rejected_. Before submission, forms have a status of _draft_, which is the only status that allows forms to be modified.
-
-To ensure the integrity of document data through system changes, all submissions are stored as the full text of the document; not as values to be filled into a template. This ensures that the original text of a submitted document won't be corrupted by system upgrades.
-
-#### City Clerk Document Review
-
-The City Clerk will be able to review documents that are _pending review_, and mark them as _approved_ or _rejected_. If a document is rejected, the City Clerk can tell the lobbyist what they need to do differently for their resubmission by calling or emailing them.
-
-#### Email Notifications
-
-#### User Account Management
-Administrators can perform a number of user account management activities. An administrator cannot perform some types of actions on themselves.
-* Changing accounts' types to and from administrators.
-* Deactivating accounts.
-* Changing an account's email address / username.
-* Requiring password resets.
-
-### User Interface
-
-#### Account's Document List Page
-
-This page shows a list of all the documents that a user has submitted. Each list entry shows the document's title, submission date, status property (_pending review_, _approved_, _rejected_), and a link to view the actual submitted document.
-
-The page is available to lobbyists for working with their own account, and to administrators for any exploring any account.
-
-#### Document Viewing Page
-
-This page shows a submitted document. It is available to both lobbyists and administrators for reviewing documents. Generally, this page is accessed by clicking a link for viewing a particular non-draft document.
-
-A timeline of status changes with links to previous document versions is provided.
-
-Administrator-specific features:
-* Allows changing the document from any status to either _accepted_ or _rejected_.
-* Contact information is displayed for the account's user, so that follow-up questions and requests can be easily made.
-
-Lobbyist-specific features:
-* Allows creating a resubmission with modifications, if the document was rejected and is the most recent version of the document.
-* Allows creating an amended submission, if the document was approved and is the most recent version of the document.
-* If a draft resubmission or amendment exists, the user will see a prominent link to access and continue working on the draft.
-
-#### Document Editing Page
-
-This is the page that lobbyists use to fill in documents. It has a button to force saving the document as a draft, a status to say when the draft was last saved, and a button to review the form before submitting. The review form before submitting option will automatically save the draft before progressing to the review page.
-
-#### Document Review Prior to Submission Page
-
-This is a lobbyist's view of the document just before submitting it. It has a button to return to editing the draft, and a button to submit the document.
-
-#### Lobbyist Dashboard
-* Links for accessing the other pages that the lobbyist has access to.
-* Notifications listing documents that need attention.
-  * Drafts that haven't been completed.
-  * Document rejections.
-  * Document approvals.
-  * Pending deadlines for expense reports.
-
-#### Accounts Management Page
-
-This administrator-only page provides a table view all user accounts, with administrator actions that can be performed on them.
-
-#### Documents Pending Review Page
-
-This administrator-only page lists all documents that administrators need to approve or reject.
-
-#### Administrator Dashboard
-* Links for accessing the other pages that the lobbyist has access to.
-* Notifications for:
-  * Drafts that are pending review.
-  * New users that have signed up.
-
-#### Login Page
-* Allows user logins.
-* Allows user sign-ups.
-* Provides a reset / forgot password link.
+#### Creating Accounts
+Anybody on the Internet can create a user account by submitting an email address username with a password.
 
 ---
 
@@ -163,7 +67,7 @@ This administrator-only page lists all documents that administrators need to app
 * Usernames should be email addresses.
 * Confirmation step for lobbyists to assent that the information they submit is true.
 * Allow lobbyists to register for their principals.
-  * Collect the $150 fee.
+  * Collect the $250 fee.
   * Not-for-profit lobbyists will click on “Wave Fee.”
   * Registration is valid until December 31st in the year of registration.
   * Registration will be pending until City staff confirm ‘Not for Profit’ status.
@@ -172,11 +76,21 @@ This administrator-only page lists all documents that administrators need to app
   * Unlike registering a principal, this does not require a fee.
 * Allow Lobbyist to submit an Expenditure report online.
 * Email capabilities to send reminders, receipts and  welcome messages to active Lobbyists.
-* Reporting capabilities (Report by Lobbyist, Principal , Issue, Year of Registration, etc.)
+* Reporting capabilities (Report by Lobbyist, Principal , Issue, Year of Registration, etc.).
+* Data that lobbyists enter should be available to the public automatically, right away.
+* Data that lobbyists enter should be stored simply as values in the database.
+* Lobbyists should be able to create, edit, and manage their data throughout the year, as they please.
+* The issues that a lobbyist represents for a particular principal should simply be entered in a list all together; this is different from and more convenient than the physical forms, which required a separate form to be submitted for each (principal, issue) pair.
+* If a lobbyist does their submission on paper, then the office will enter the information themselves, and then discard the paper submission.
+
+### Additional Notes
+* Official approval isn't required for the information that lobbyists enter.
+* User identity verification isn't a requirement.
+* Some notes on visual identity are that we can take inspiration from the City of Coral Gables website for colors and patterns. Also, it might be nice to include the City of Coral Gables logo.
 
 ## Status
 
-Gathering Requirements.
+Beta version to be completed in early November.
 
 ## Press
 
