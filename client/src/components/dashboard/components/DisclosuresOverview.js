@@ -36,13 +36,13 @@ function filterSortDisclosures(disclosures, filterToYear = null) {
 }
 
 const headerYearSelecton = (selectedYear, yearOptions, handleChange) => (
-  <h1 className="title is-2 has-text-black">
-    Viewing reports for calendar year
+  <h6 className="title is-6">
+    Calendar Year:
     {' '}
-    <select name="selectedYear" value={selectedYear} onChange={handleChange} className="select is-large">
+    <select name="selectedYear" value={selectedYear} onChange={handleChange} className="select">
       { yearOptions.map(year => <option key={year} value={year}>{year}</option>) }
     </select>
-  </h1>
+  </h6>
 );
 
 const disclosureTableHeading = includeLobbyistName => (
