@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
 
 import { cloneDeep } from 'lodash';
@@ -7,10 +7,14 @@ import { cloneDeep } from 'lodash';
 import { ExistingIssueUpdate, sortExistingIssueUpdates } from './ExistingIssueUpdate';
 import { NewIssue, sortNewIssues } from './NewIssue';
 
+import { fetchUser } from '../../requests/authRequests';
 import { createNewDisclosure, fetchDisclosure, modifyDisclosure } from '../../requests/disclosures';
+import { fetchYears } from '../../requests/paymentDocumentation';
 
-import { requestStates, submitButton } from '../uiElements/submitButton';
+import { saveChangesPrompt, saveNewPrompt } from './savePrompt';
+import { requestStates } from '../uiElements/submitButton';
 import textField from '../uiElements/textField';
+import textArea from '../uiElements/textArea';
 import IssuesEditList from './IssuesEditList';
 import ExpenseReportView from './ExpenseReportView';
 
@@ -19,25 +23,14 @@ export const editDisclosureModes = {
   createNew: 2
 };
 
-// constants that relate to the mongo enum values
-export const feeWaverValues = {
-  notRequested: 'not_requested',
-  requested: 'requested',
-  granted: 'granted',
-  denied: 'denied'
-};
-
 function reconcileIssues(issueUpdates, newIssues) {
   // Remove deleted and blank issues.
   const updatedIssues = issueUpdates.filter(update => !update.isDelete());
   const processedNewIssues = newIssues.filter(issue => !issue.isBlank());
-  console.log(newIssues);
-  console.log(processedNewIssues);
 
   // Convert issues and their internal records into objects ready for MongoDB.
   const reconciledIssues = cloneDeep([...updatedIssues, ...processedNewIssues])
     .map(issue => issue.makeMongoIssue());
-  console.log(reconciledIssues);
 
   return reconciledIssues;
 }
@@ -50,25 +43,39 @@ function getIssueOptions(issuesList) {
 
 function disclosureState(
   mode = editDisclosureModes.createNew,
-  principalName = '',
   reportingYear = 0,
+  principalName = '',
+  principalAddress = '',
+  principalPhoneNumber = '',
+  lobbyistBusinessName = '',
+  lobbyistBusinessAddress = '',
+  lobbyistBusinessPhoneNumber = '',
   existingIssues = [],
   newIssues = [],
-  feeWaver = feeWaverValues.notRequested,
   disclosureId = '',
-  submitRequestStatus = requestStates.initial
+  submitRequestStatus = requestStates.initial,
+  yearInfo = { },
+  user = { },
+  lobbyistName = ''
 ) {
   const updatedExistingIssues = existingIssues.map(issue => new ExistingIssueUpdate(issue));
 
   return {
     mode,
-    principalName,
     reportingYear,
+    principalName,
+    principalAddress,
+    principalPhoneNumber,
+    lobbyistBusinessName,
+    lobbyistBusinessAddress,
+    lobbyistBusinessPhoneNumber,
     updatedExistingIssues,
     newIssues,
-    feeWaver,
     disclosureId,
-    submitRequestStatus
+    submitRequestStatus,
+    yearInfo,
+    user,
+    lobbyistName
   };
 }
 
@@ -80,7 +87,7 @@ export class EditDisclosure extends Component {
       mode, principalName, reportingYear
     } = this.props;
     if (mode === editDisclosureModes.createNew) {
-      this.state = disclosureState(mode, principalName, reportingYear);
+      this.state = disclosureState(mode, reportingYear, principalName);
     } else {
       this.state = disclosureState(mode);
     }
@@ -96,26 +103,39 @@ export class EditDisclosure extends Component {
   }
 
   async componentDidMount() {
-    const { mode } = this.state;
-    if (mode === editDisclosureModes.editExisting) {
-      const { match } = this.props;
-      const { disclosureId } = match.params;
-      try {
+    try {
+      const { mode } = this.state;
+      if (mode === editDisclosureModes.editExisting) {
+        const { match } = this.props;
+        const { disclosureId } = match.params;
         const disclosure = await fetchDisclosure(disclosureId) || { };
         const newIssues = [new NewIssue()];
+        const lobbyistName = disclosure.lobbyistId ? disclosure.lobbyistId.fullName : '';
         const updatedState = disclosureState(
           mode,
-          disclosure.principalName,
           disclosure.reportingYear,
+          disclosure.principalName,
+          disclosure.principalAddress,
+          disclosure.principalPhoneNumber,
+          disclosure.lobbyistBusinessName,
+          disclosure.lobbyistBusinessAddress,
+          disclosure.lobbyistBusinessPhoneNumber,
           disclosure.issues,
           newIssues,
-          disclosure.feeWaver,
-          disclosure.id
+          disclosure.id,
+          undefined,
+          undefined,
+          undefined,
+          lobbyistName
         );
         this.setState(updatedState);
-      } catch (err) {
-        console.log('Error getting disclosure info.');
       }
+      const yearInfo = await fetchYears() || { };
+      this.setState({ yearInfo });
+      const user = await fetchUser() || { };
+      this.setState({ user });
+    } catch (err) {
+      console.log('Error getting disclosure info.');
     }
     this.manageBlankNewIssues();
   }
@@ -230,26 +250,34 @@ export class EditDisclosure extends Component {
   async handleSubmit(e) {
     e.preventDefault();
 
-    const { updatedExistingIssues, newIssues, expenses } = this.state;
-    const reconciledIssues = reconcileIssues(updatedExistingIssues, newIssues, expenses);
-
+    const { updatedExistingIssues, newIssues } = this.state;
+    const reconciledIssues = reconcileIssues(updatedExistingIssues, newIssues);
+    const {
+      mode,
+      reportingYear,
+      principalName,
+      principalAddress,
+      principalPhoneNumber,
+      lobbyistBusinessName,
+      lobbyistBusinessAddress,
+      lobbyistBusinessPhoneNumber
+    } = this.state;
     try {
       this.setState({ submitRequestStatus: requestStates.submitted });
-      const {
-        mode,
-        principalName,
-        reportingYear,
-        feeWaver
-      } = this.state;
       const { lobbyistId } = this.props;
       if (mode === editDisclosureModes.createNew) {
-        await createNewDisclosure(
+        const newDisclosure = await createNewDisclosure(
           lobbyistId,
           reportingYear,
           principalName,
-          feeWaver,
+          principalAddress,
+          principalPhoneNumber,
+          lobbyistBusinessName,
+          lobbyistBusinessAddress,
+          lobbyistBusinessPhoneNumber,
           reconciledIssues
         );
+        this.setState({ disclosureId: newDisclosure._id });
       } else if (mode === editDisclosureModes.editExisting) {
         const { disclosureId } = this.state;
         await modifyDisclosure(
@@ -257,7 +285,11 @@ export class EditDisclosure extends Component {
           lobbyistId,
           reportingYear,
           principalName,
-          feeWaver,
+          principalAddress,
+          principalPhoneNumber,
+          lobbyistBusinessName,
+          lobbyistBusinessAddress,
+          lobbyistBusinessPhoneNumber,
           reconciledIssues
         );
       }
@@ -279,56 +311,93 @@ export class EditDisclosure extends Component {
   render() {
     const issueRenderList = this.makeIssueRenderList();
     const {
+      mode,
+      disclosureId,
       principalName,
+      principalAddress,
+      principalPhoneNumber,
+      lobbyistBusinessName,
+      lobbyistBusinessAddress,
+      lobbyistBusinessPhoneNumber,
       reportingYear,
-      // feeWaver,
-      submitRequestStatus
+      submitRequestStatus,
+      yearInfo,
+      user,
+      lobbyistName
     } = this.state;
-    const { yearOptions } = this.props;
+
+    const yearOptions = user.isAdmin ? (yearInfo.allYears || { }) : (yearInfo.openYears || []);
     const issueOptions = getIssueOptions(issueRenderList);
+
+    if (submitRequestStatus === requestStates.succeeded) {
+      const viewURL = `/disclosure/view/${disclosureId}`;
+      return <Redirect to={viewURL} />;
+    }
+
     return (
-      <div className="hero-body">
-        <section>
-          // TODO: add header with lobbyist name
-          <form onSubmit={this.handleSubmit}>
-            {textField('Principal Name', 'principalName', principalName, this.handleChange)}
-            <div className="field">
-              <label className="label" htmlFor="reportingYear">Calendar Year of Lobbying</label>
-              <select name="reportingYear" value={reportingYear} onChange={this.handleChange} className="select">
-                { yearOptions.map(year => <option key={year} value={year}>{year}</option>) }
-              </select>
-            </div>
-            <label className="label" htmlFor="issues">Issues Represented</label>
-            <IssuesEditList
-              name="issues"
-              issueRenderList={issueRenderList}
-              renameIssue={this.renameIssue}
-              deleteIssue={this.deleteIssue}
-              resetIssue={this.resetIssue}
-            />
-            { issueOptions.map(issue => (
-              <ExpenseReportView
-                issueName={issue.name()}
-                issueId={issue.issueId()}
-                key={issue.issueId()}
-                expenseReport={issue.expenseReport()}
-                setExpenseAmount={this.setExpenseAmount}
-                showPrincipalName
-                showYear
-                principalName={principalName}
-                year={reportingYear}
+      <div className="container">
+        <form onSubmit={this.handleSubmit}>
+          <div className="columns">
+            <div className="column is-10 is-offset-1">
+              { mode !== editDisclosureModes.createNew
+                && saveChangesPrompt(disclosureId, submitRequestStatus) }
+              { mode === editDisclosureModes.createNew && saveNewPrompt(submitRequestStatus) }
+              {
+                mode === editDisclosureModes.editExisting && (
+                  <div style={{ marginBottom: '.8rem' }}>
+                    <label className="label">Lobbyist</label>
+                    <span className="has-weight-bold is-size-4">
+                      {lobbyistName}
+                    </span>
+                  </div>
+                )
+              }
+              {textField('Principal Name', 'principalName', principalName, this.handleChange)}
+              {textArea('Principal Address', 'principalAddress', principalAddress, this.handleChange)}
+              {textField('Principal Phone Number', 'principalPhoneNumber', principalPhoneNumber, this.handleChange)}
+              {textField('Your Business Name', 'lobbyistBusinessName', lobbyistBusinessName, this.handleChange)}
+              {textArea('Your Business Address', 'lobbyistBusinessAddress', lobbyistBusinessAddress, this.handleChange)}
+              {textField('Your Business Phone Number', 'lobbyistBusinessPhoneNumber', lobbyistBusinessPhoneNumber, this.handleChange)}
+              <div className="field">
+                <label className="label" htmlFor="reportingYear">Calendar Year of Lobbying</label>
+                <select name="reportingYear" value={reportingYear} onChange={this.handleChange} className="select">
+                  { yearOptions.map(year => <option key={year} value={year}>{year}</option>) }
+                </select>
+              </div>
+              <label className="label" htmlFor="issues">Issues Represented</label>
+              <IssuesEditList
+                name="issues"
+                issueRenderList={issueRenderList}
+                renameIssue={this.renameIssue}
+                deleteIssue={this.deleteIssue}
+                resetIssue={this.resetIssue}
               />
-            )) }
-            <div className="field is-grouped">
-              {submitButton('Save', submitRequestStatus, this.handleSubmit)}
-              <Link to="/">
-                <button type="button" className="button is-light">
-                  <span>Cancel</span>
-                </button>
-              </Link>
             </div>
-          </form>
-        </section>
+          </div>
+          <div className="columns">
+            <div className="column is-10 is-offset-1">
+              <div className="columns is-multiline">
+                { issueOptions.map(issue => (
+                  <div className="column is-6" key={issue.issueId()}>
+                    <ExpenseReportView
+                      issueName={issue.name()}
+                      issueId={issue.issueId()}
+                      expenseReport={issue.expenseReport()}
+                      setExpenseAmount={this.setExpenseAmount}
+                      showPrincipalName
+                      showYear
+                      principalName={principalName}
+                      year={reportingYear}
+                    />
+                  </div>
+                )) }
+              </div>
+              { mode !== editDisclosureModes.createNew
+                && saveChangesPrompt(disclosureId, submitRequestStatus) }
+              { mode === editDisclosureModes.createNew && saveNewPrompt(submitRequestStatus) }
+            </div>
+          </div>
+        </form>
       </div>
     );
   }
@@ -342,13 +411,11 @@ EditDisclosure.propTypes = {
   ]).isRequired,
   lobbyistId: PropTypes.string,
   principalName: PropTypes.string,
-  reportingYear: PropTypes.number, // note: reportingYear must be a value in yearOptions
-  yearOptions: PropTypes.arrayOf(PropTypes.number)
+  reportingYear: PropTypes.number
 };
 EditDisclosure.defaultProps = {
   match: null,
   lobbyistId: '',
   principalName: '',
-  reportingYear: 2018,
-  yearOptions: [2018, 2017]
+  reportingYear: 2018
 };

@@ -163,8 +163,6 @@ class App extends Component {
                 {...props}
                 lobbyistId={currentUser ? currentUser.id : ''}
                 userIsAuthenticated={userIsAuthenticated}
-                reportingYear={2018}
-                yearOptions={[2018, 2017]}
                 mode={editDisclosureModes.createNew}
               />
             )}
