@@ -18,12 +18,18 @@ function selectorFromOptionalFields(fieldsObject) {
 
 // This function relies on the Mongoose model enforcing the unique property
 // of entries' (lobbyistId, reportingYear, principalName) triples.
-async function createNewDisclosure(lobbyistId, reportingYear, principalName, feeWaver, issues = []) {
+async function createNewDisclosure(lobbyistId, reportingYear, principalName, principalAddress,
+  principalPhoneNumber, lobbyistBusinessName, lobbyistBusinessAddress,
+  lobbyistBusinessPhoneNumber, issues = []) {
   const disclosure = await new PrincipalDisclosure({
     lobbyistId,
     reportingYear,
     principalName,
-    feeWaver,
+    principalAddress,
+    principalPhoneNumber,
+    lobbyistBusinessName,
+    lobbyistBusinessAddress,
+    lobbyistBusinessPhoneNumber,
     issues
   }).save();
   return disclosure;
@@ -36,14 +42,19 @@ module.exports = (app) => {
   app.use('/api/disclosure/create', requireConcernedUserOrAdmin);
   app.post('/api/disclosure/create', async (req, res) => {
     const {
-      lobbyistId, reportingYear, principalName, feeWaver, issues
+      lobbyistId, reportingYear, principalName, principalAddress, principalPhoneNumber,
+      lobbyistBusinessName, lobbyistBusinessAddress, lobbyistBusinessPhoneNumber, issues
     } = req.body.params;
     try {
       const disclosure = await createNewDisclosure(
         lobbyistId,
         reportingYear,
         principalName,
-        feeWaver,
+        principalAddress,
+        principalPhoneNumber,
+        lobbyistBusinessName,
+        lobbyistBusinessAddress,
+        lobbyistBusinessPhoneNumber,
         issues
       );
       res.json(disclosure);
@@ -54,10 +65,10 @@ module.exports = (app) => {
   });
 
   app.post('/api/disclosure/fetch', async (req, res) => {
-    const { lobbyistId, reportingYear, principal } = req.body.params;
-    const selector = selectorFromOptionalFields({ lobbyistId, reportingYear, principal });
+    const { lobbyistId, reportingYear } = req.body.params;
+    const selector = selectorFromOptionalFields({ lobbyistId, reportingYear });
     try {
-      const disclosures = await PrincipalDisclosure.find(selector);
+      const disclosures = await PrincipalDisclosure.find(selector).populate('lobbyistId');
       res.json(disclosures);
     } catch (err) {
       res.status(404);
@@ -67,7 +78,7 @@ module.exports = (app) => {
   app.post('/api/disclosure/fetchById', async (req, res) => {
     const { disclosureId } = req.body.params;
     try {
-      const disclosure = await PrincipalDisclosure.findById(disclosureId);
+      const disclosure = await PrincipalDisclosure.findById(disclosureId).populate('lobbyistId');
       res.json(disclosure);
     } catch (err) {
       res.status(404);
@@ -81,7 +92,11 @@ module.exports = (app) => {
         'lobbyistId',
         'reportingYear',
         'principalName',
-        'feeWaver',
+        'principalAddress',
+        'principalPhoneNumber',
+        'lobbyistBusinessName',
+        'lobbyistBusinessAddress',
+        'lobbyistBusinessPhoneNumber',
         'issues'
       ];
       const { disclosureId } = req.body.params;
