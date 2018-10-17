@@ -31,20 +31,18 @@ export default class NewIssueEditField extends Component {
       marginBottom: '.7em'
     };
     return (
-      <div>
-        <div className="field is-grouped" style={style}>
-          <div className="control">
-            <input
-              className="input"
-              type="text"
-              name="newIssue"
-              placeholder="New Issue"
-              value={issueName}
-              onChange={this.handleChange}
-            />
-          </div>
-          { this.addMessage() }
+      <div className="field is-grouped" style={style}>
+        <div className="control">
+          <textarea
+            className="textarea"
+            type="text"
+            name="newIssue"
+            placeholder="+ New Issue"
+            value={issueName}
+            onChange={this.handleChange}
+          />
         </div>
+        { this.addMessage() }
       </div>
     );
   }

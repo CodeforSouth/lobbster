@@ -127,8 +127,8 @@ export class ExistingIssueEditField extends Component {
     return (
       <div className="field is-grouped">
         <div className="control">
-          <input
-            className="input"
+          <textarea
+            className="textarea"
             type="text"
             readOnly
             style={{ border: 'none', background: 'transparent' }}
@@ -154,8 +154,8 @@ export class ExistingIssueEditField extends Component {
         { this.renameMessage() }
         <div className="field is-grouped" style={style}>
           <div className="control">
-            <input
-              className="input"
+            <textarea
+              className="textarea"
               type="text"
               id={this.fieldIdentifier()}
               name="updatedValue"
