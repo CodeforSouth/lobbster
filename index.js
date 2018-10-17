@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
 require('./models/PrincipalDisclosure');
+require('./models/PaymentDocumentation');
 require('./services/passport');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
@@ -34,6 +35,8 @@ app.use(passport.session());
 require('./routes/authorization')(app);
 require('./routes/userManagement')(app);
 require('./routes/principalDisclosure')(app);
+require('./routes/paymentDocumentation')(app);
+require('./routes/billingRoutes')(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
