@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import discloseNewPrincipalButton from '../components/discloseNewPrincipalButton';
+
 import { fetchDisclosures } from '../../../requests/disclosures';
+import { fetchYears } from '../../../requests/paymentDocumentation';
 
 function formatCurrency(amount) {
   // Compute spaces between dollar sign and amount.
@@ -111,7 +114,8 @@ const disclosureRow = (
 };
 
 const disclosureTableBlock = (disclosure, includeLobbyistName, linkToDisclosure) => {
-  const { issues, principalName, id } = disclosure;
+  const { issues, principalName, id, lobbyistId: lobbyist } = disclosure;
+  const lobbyistName = lobbyist ? lobbyist.fullName : '';
   const rowCount = issues.length;
   const rows = [];
   if (rowCount === 0) {
@@ -121,7 +125,6 @@ const disclosureTableBlock = (disclosure, includeLobbyistName, linkToDisclosure)
     const issueTotalExpenses = 0;
     const showBottomBorder = true;
     const showPrincipal = true;
-    const lobbyistName = 'Placeholder';
     rows.push(disclosureRow(
       rowKey,
       id,
@@ -140,7 +143,6 @@ const disclosureTableBlock = (disclosure, includeLobbyistName, linkToDisclosure)
       const { name: issueName, totalExpenses: issueTotalExpenses } = issues[row];
       const showBottomBorder = row === rowCount - 1; // show border in the block's last row
       const showPrincipal = row === 0; // show principal in the block's first row
-      const lobbyistName = 'Placeholder';
       rows.push(disclosureRow(
         rowKey,
         id,
@@ -178,8 +180,9 @@ export default class DisclosuresOverview extends Component {
     const { lobbyistId } = this.props;
     this.state = {
       lobbyistId,
-      selectedYear: props.selectedYear,
-      disclosures: []
+      selectedYear: undefined,
+      disclosures: [],
+      yearInfo: { }
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -188,7 +191,8 @@ export default class DisclosuresOverview extends Component {
     const { lobbyistId } = this.state;
     try {
       const disclosures = await fetchDisclosures(lobbyistId) || { };
-      this.setState({ disclosures });
+      const yearInfo = await fetchYears() || { };
+      this.setState({ disclosures, yearInfo, selectedYear: yearInfo.currentYear });
     } catch (err) {
       console.log('Error getting account info.');
     }
@@ -207,12 +211,23 @@ export default class DisclosuresOverview extends Component {
   }
 
   render() {
-    const { yearOptions, includeLobbyistName, linkToDisclosure } = this.props;
-    const { selectedYear, disclosures } = this.state;
+    const { includeLobbyistName, linkToDisclosure, showAddButton } = this.props;
+    const { disclosures, yearInfo, selectedYear } = this.state;
+    console.log(disclosures);
+    const yearOptions = yearInfo.allYears || [];
+    const openYears = yearInfo.openYears || [];
+    const selectedYearIsOpen = openYears.indexOf(selectedYear) !== -1;
     return (
       <div>
         { headerYearSelecton(selectedYear, yearOptions, this.handleChange) }
-        { disclosureTable(disclosures, selectedYear, includeLobbyistName, linkToDisclosure) }
+        { disclosureTable(
+          disclosures, selectedYear, includeLobbyistName, linkToDisclosure
+        ) }
+        { showAddButton && selectedYearIsOpen && (
+          <div className="container">
+            { discloseNewPrincipalButton() }
+          </div>
+        )}
       </div>
     );
   }
@@ -220,8 +235,6 @@ export default class DisclosuresOverview extends Component {
 
 DisclosuresOverview.propTypes = {
   lobbyistId: PropTypes.string,
-  selectedYear: PropTypes.number.isRequired, // note: selectedYear must be a value in yearOptions
-  yearOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
   includeLobbyistName: PropTypes.bool.isRequired,
   linkToDisclosure: PropTypes.bool
 };
