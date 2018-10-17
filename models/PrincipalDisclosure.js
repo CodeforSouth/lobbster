@@ -56,14 +56,14 @@ Issue.virtual('totalExpenses').get(function sumIssueExpenses() {
 });
 
 const PrincipalDisclosure = new Schema({
-  lobbyistId: { type: ObjectId, required: true },
-  principalName: { type: String, required: true },
+  lobbyistId: { type: ObjectId, ref: 'users', required: true },
   reportingYear: { type: Number, required: true },
-  feeWaver: {
-    type: String,
-    enum: ['not_requested', 'requested', 'granted', 'denied'],
-    required: true
-  },
+  principalName: { type: String, required: true },
+  principalAddress: { type: String, required: true },
+  principalPhoneNumber: { type: String, required: true },
+  lobbyistBusinessName: { type: String, required: true },
+  lobbyistBusinessAddress: { type: String, required: true },
+  lobbyistBusinessPhoneNumber: { type: String, required: true },
   issues: { type: [Issue], required: true }
 }, {
   toObject: { virtuals: true },
