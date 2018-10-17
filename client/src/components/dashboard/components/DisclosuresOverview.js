@@ -213,7 +213,6 @@ export default class DisclosuresOverview extends Component {
   render() {
     const { includeLobbyistName, linkToDisclosure, showAddButton } = this.props;
     const { disclosures, yearInfo, selectedYear } = this.state;
-    console.log(disclosures);
     const yearOptions = yearInfo.allYears || [];
     const openYears = yearInfo.openYears || [];
     const selectedYearIsOpen = openYears.indexOf(selectedYear) !== -1;
