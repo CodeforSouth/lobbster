@@ -12,13 +12,16 @@ npm run install-dev
 3. Create a dev-keys.js file in the config directory. It should be just like prod-keys.js, but with your values in place of the process.env ones. You will need:
    * A URI for accessing a development-specific MongoDB instance.
    * A secret for express-session to use.
-   * A publishable key from Stripe.
    * A secret key from Stripe.
-4. Launch the project locally by calling the dev script from the root project directory.
-5. Grant *administrator* status to your first administrator account by manually setting an account's MongoDB *isAdmin* field to *true*. Administrator accounts can grant administrator status to other accounts via *User Account Management*.
+4. Create a .env.development file in the client directory. It should create your Stripe publishable key's environment variable as follows. For deployment, you'll need to create a similar .env.production file.
+```
+REACT_APP_STRIPE_KEY=pk_test_968cDB2YElX91ulzPSZkFArk
+```
+5. Launch the project locally by calling the dev script from the root project directory.
 ```
 npm run dev
 ```
+6. Grant *administrator* status to your first administrator account by manually setting an account's MongoDB *isAdmin* field to *true*. Administrator accounts can grant administrator status to other accounts via *User Account Management*.
 
 ## Background
 ### Lobbyist Responsibilities
