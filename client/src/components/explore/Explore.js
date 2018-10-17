@@ -20,7 +20,7 @@ export default class Explore extends Component {
             selectedYear={selectedYear}
             yearOptions={yearOptions}
             includeLobbyistName
-            linkToDisclosure={false}
+            linkToDisclosure
             lobbyistId=""
           />
         </div>
