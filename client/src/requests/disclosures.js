@@ -1,11 +1,10 @@
 import axios from 'axios';
 
-export const fetchDisclosures = async (lobbyistId, reportingYear, principal) => {
+export const fetchDisclosures = async (lobbyistId, reportingYear) => {
   const response = await axios.post('/api/disclosure/fetch', {
     params: {
       lobbyistId,
-      reportingYear,
-      principal
+      reportingYear
     }
   });
   return response.data;
@@ -26,7 +25,11 @@ export const createNewDisclosure = async (
   lobbyistId,
   reportingYear,
   principalName,
-  feeWaver,
+  principalAddress,
+  principalPhoneNumber,
+  lobbyistBusinessName,
+  lobbyistBusinessAddress,
+  lobbyistBusinessPhoneNumber,
   issues
 ) => {
   const response = await axios.post(
@@ -36,7 +39,11 @@ export const createNewDisclosure = async (
         lobbyistId,
         reportingYear,
         principalName,
-        feeWaver,
+        principalAddress,
+        principalPhoneNumber,
+        lobbyistBusinessName,
+        lobbyistBusinessAddress,
+        lobbyistBusinessPhoneNumber,
         issues
       }
     }
@@ -49,7 +56,11 @@ export const modifyDisclosure = async (
   lobbyistId,
   reportingYear,
   principalName,
-  feeWaver,
+  principalAddress,
+  principalPhoneNumber,
+  lobbyistBusinessName,
+  lobbyistBusinessAddress,
+  lobbyistBusinessPhoneNumber,
   issues
 ) => {
   const response = await axios.post(
@@ -60,7 +71,11 @@ export const modifyDisclosure = async (
         lobbyistId,
         reportingYear,
         principalName,
-        feeWaver,
+        principalAddress,
+        principalPhoneNumber,
+        lobbyistBusinessName,
+        lobbyistBusinessAddress,
+        lobbyistBusinessPhoneNumber,
         issues
       }
     }
