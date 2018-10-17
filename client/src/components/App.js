@@ -24,6 +24,7 @@ import Navbar from './navigation/Navbar';
 import UserAccountManagement from './userAccountManagement/UserAccountManagement';
 import EditUserAccount from './userAccountManagement/EditUserAccount';
 import { EditDisclosure, editDisclosureModes } from './disclosure/EditDisclosure';
+import ReadOnlyDisclosure from './disclosure/ReadOnlyDisclosure';
 import Explore from './explore/Explore';
 
 library.add(faEnvelope);
@@ -176,6 +177,14 @@ class App extends Component {
                 lobbyistId={currentUser ? currentUser.id : ''}
                 userIsAuthenticated={userIsAuthenticated}
                 mode={editDisclosureModes.editExisting}
+              />
+            )}
+          />
+          <Route
+            path="/disclosure/view/:disclosureId"
+            render={props => (
+              <ReadOnlyDisclosure
+                {...props}
               />
             )}
           />
