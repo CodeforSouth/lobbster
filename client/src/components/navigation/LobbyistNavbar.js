@@ -13,9 +13,9 @@ class LobbyistNavbar extends Component {
     this.toggleBurger = this.toggleBurger.bind(this);
   }
 
-  burgerClassList() {
+  burgerDependentClasses() {
     const { burgerIsActive } = this.state;
-    const requiredClasses = 'navbar-burger burger';
+    const requiredClasses = 'navbar-menu';
     const activeClass = burgerIsActive ? 'is-active' : '';
     return [requiredClasses, activeClass].join(' ');
   }
@@ -34,14 +34,15 @@ class LobbyistNavbar extends Component {
             <a className="navbar-item" href="/">
               {user && user.fullName}
             </a>
-            <span className={this.burgerClassList()} data-target="navMenu" onClick={this.toggleBurger}>
+            <span className="navbar-burger burger" data-target="navMenu" onClick={this.toggleBurger}>
               <span />
               <span />
               <span />
             </span>
           </div>
-          <div id="navMenu" className="navbar-menu">
+          <div id="navMenu" className={this.burgerDependentClasses()}>
             <div className="navbar-end">
+              <Link to="/payments/" className="navbar-item is-active">Payments</Link>
               <Link to="/" className="navbar-item is-active">Dashboard</Link>
               <Link to="/" className="navbar-item" onClick={endSession}>Logout</Link>
             </div>
