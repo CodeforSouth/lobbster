@@ -47,7 +47,7 @@ class LoginForm extends Component {
   }
 
   render() {
-    const { emailAddress, password, loginRequestState, submitRequestStatus } = this.state;
+    const { emailAddress, password, loginRequestState } = this.state;
     const isLoginRequestPending = loginRequestState === submitted;
     const loginRequestFailed = loginRequestState === failed;
     return (
@@ -57,7 +57,7 @@ class LoginForm extends Component {
           { passwordField(password, 'password', this.handleChange) }
           { authButton('Login', isLoginRequestPending) }
           { requestMonitor('Login Failed', loginRequestFailed) }
-          <p className="has-text-grey">
+          <p className="has-text-grey" style={{ paddingTop: '0.8rem' }}>
             <a href="/">Forgot Password</a>
           </p>
         </form>

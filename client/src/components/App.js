@@ -1,12 +1,19 @@
 import 'bulma/css/bulma.css';
+import 'bulma-tooltip/dist/css/bulma-tooltip.min.css';
 import './App.css';
 
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEnvelope,
+  faLock,
+  faExclamationTriangle,
+  faPlus,
+  faTrash,
+  faEdit
+} from '@fortawesome/free-solid-svg-icons';
 
 import { fetchUser, logout } from '../requests/authRequests';
 import { isNonemptyObject } from '../utilities/utilities';
@@ -14,11 +21,19 @@ import { isNonemptyObject } from '../utilities/utilities';
 import Dashboard from './dashboard/Dashboard';
 import Landing from './Landing';
 import Navbar from './navigation/Navbar';
+import MyPayments from './myPayments/MyPayments';
 import UserAccountManagement from './userAccountManagement/UserAccountManagement';
 import EditUserAccount from './userAccountManagement/EditUserAccount';
+import { EditDisclosure, editDisclosureModes } from './disclosure/EditDisclosure';
+import ReadOnlyDisclosure from './disclosure/ReadOnlyDisclosure';
+import Explore from './explore/Explore';
 
 library.add(faEnvelope);
 library.add(faLock);
+library.add(faExclamationTriangle);
+library.add(faPlus);
+library.add(faTrash);
+library.add(faEdit);
 
 class App extends Component {
   constructor(props) {
@@ -59,19 +74,21 @@ class App extends Component {
     return (
       <BrowserRouter>
         <section className="hero has-background-white is-fullheight">
-          <div className="hero-head">
-            <Route
-              path="/"
-              render={props => (
-                <Navbar
-                  {...props}
-                  endSession={this.endSession}
-                  user={currentUser}
-                  userIsAuthenticated={userIsAuthenticated}
-                />
-              )}
-            />
-          </div>
+          <Route
+            path="/"
+            render={props => (
+              <div className="hero-head">
+                <div className="container">
+                  <Navbar
+                    {...props}
+                    endSession={this.endSession}
+                    user={currentUser}
+                    userIsAuthenticated={userIsAuthenticated}
+                  />
+                </div>
+              </div>
+            )}
+          />
           <Route
             path="/"
             exact
@@ -80,6 +97,31 @@ class App extends Component {
                 {...props}
                 updateCurrentUser={this.updateCurrentUser}
                 userIsAuthenticated={userIsAuthenticated}
+              />
+            )}
+          />
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <div className="hero-foot">
+                <nav className="tabs is-right">
+                  <div className="container">
+                    <ul>
+                      <li><Link to="explore">Explore Our Data</Link></li>
+                    </ul>
+                  </div>
+                </nav>
+              </div>
+            )}
+          />
+          <Route
+            path="/explore"
+            exact
+            render={() => (
+              <Explore
+                selectedYear={2018}
+                yearOptions={[2018, 2017]}
               />
             )}
           />
@@ -106,12 +148,51 @@ class App extends Component {
             )}
           />
           <Route
+            path="/payments"
+            exact
+            render={props => (
+              <MyPayments
+                {...props}
+              />
+            )}
+          />
+          <Route
             path="/edit-user-account/:emailAddress"
             render={props => (
               <EditUserAccount
                 {...props}
                 user={currentUser}
                 userIsAuthenticated={userIsAuthenticated}
+              />
+            )}
+          />
+          <Route
+            path="/disclosure/new"
+            render={props => (
+              <EditDisclosure
+                {...props}
+                lobbyistId={currentUser ? currentUser.id : ''}
+                userIsAuthenticated={userIsAuthenticated}
+                mode={editDisclosureModes.createNew}
+              />
+            )}
+          />
+          <Route
+            path="/disclosure/edit/:disclosureId"
+            render={props => (
+              <EditDisclosure
+                {...props}
+                lobbyistId={currentUser ? currentUser.id : ''}
+                userIsAuthenticated={userIsAuthenticated}
+                mode={editDisclosureModes.editExisting}
+              />
+            )}
+          />
+          <Route
+            path="/disclosure/view/:disclosureId"
+            render={props => (
+              <ReadOnlyDisclosure
+                {...props}
               />
             )}
           />

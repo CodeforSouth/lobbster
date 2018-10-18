@@ -8,6 +8,8 @@ node_modules
 
 # Ignore keys
 dev-keys.js
+.env.development
+.env.production
 
 # Ignore bundler config.
 /.bundle

@@ -43,8 +43,10 @@ module.exports = (app) => {
   });
 
   app.post('/api/logout', (req, res) => {
-    req.logout();
-    res.status(200).send();
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid');
+      res.redirect('/');
+    });
   });
 
   // Routes under /api/admin are admin-only.

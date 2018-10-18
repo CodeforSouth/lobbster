@@ -1,36 +1,114 @@
 const mongoose = require('mongoose');
-const requireLogin = require('../middleware/requireLogin');
+const requireConcernedUserOrAdmin = require('../middleware/requireConcernedUserOrAdmin');
 
 const PrincipalDisclosure = mongoose.model('principal_disclosures');
 
+function selectorFromOptionalFields(fieldsObject) {
+  const selector = { };
+  const fields = Object.keys(fieldsObject);
+  for (let i = 0; i < fields.length; i += 1) {
+    const name = fields[i];
+    const value = fieldsObject[name];
+    if (value) {
+      selector[name] = value;
+    }
+  }
+  return selector;
+}
+
 // This function relies on the Mongoose model enforcing the unique property
 // of entries' (lobbyistId, reportingYear, principalName) triples.
-async function createNewDisclosure(lobbyistId, reportingYear, principalName) {
+async function createNewDisclosure(lobbyistId, reportingYear, principalName, principalAddress,
+  principalPhoneNumber, lobbyistBusinessName, lobbyistBusinessAddress,
+  lobbyistBusinessPhoneNumber, issues = []) {
   const disclosure = await new PrincipalDisclosure({
     lobbyistId,
     reportingYear,
     principalName,
-    feeWaver: 'not_requested',
-    issues: []
+    principalAddress,
+    principalPhoneNumber,
+    lobbyistBusinessName,
+    lobbyistBusinessAddress,
+    lobbyistBusinessPhoneNumber,
+    issues
   }).save();
   return disclosure;
 }
 
 module.exports = (app) => {
-  app.use('/api/disclosure', requireLogin);
-
   // TODO:
-  //  Only permit an admin OR the person the data is about.
   //  Only permit the person the data is about if the edit period is open.
 
+  app.use('/api/disclosure/create', requireConcernedUserOrAdmin);
   app.post('/api/disclosure/create', async (req, res) => {
-    const { lobbyistId, reportingYear, principalName } = req.body;
+    const {
+      lobbyistId, reportingYear, principalName, principalAddress, principalPhoneNumber,
+      lobbyistBusinessName, lobbyistBusinessAddress, lobbyistBusinessPhoneNumber, issues
+    } = req.body.params;
     try {
-      const disclosure = await createNewDisclosure(lobbyistId, reportingYear, principalName);
+      const disclosure = await createNewDisclosure(
+        lobbyistId,
+        reportingYear,
+        principalName,
+        principalAddress,
+        principalPhoneNumber,
+        lobbyistBusinessName,
+        lobbyistBusinessAddress,
+        lobbyistBusinessPhoneNumber,
+        issues
+      );
       res.json(disclosure);
     } catch (err) {
       console.log('Error creating disclosure', lobbyistId, reportingYear, principalName, err);
       res.status(401).send();
+    }
+  });
+
+  app.post('/api/disclosure/fetch', async (req, res) => {
+    const { lobbyistId, reportingYear } = req.body.params;
+    const selector = selectorFromOptionalFields({ lobbyistId, reportingYear });
+    try {
+      const disclosures = await PrincipalDisclosure.find(selector).populate('lobbyistId');
+      res.json(disclosures);
+    } catch (err) {
+      res.status(404);
+    }
+  });
+
+  app.post('/api/disclosure/fetchById', async (req, res) => {
+    const { disclosureId } = req.body.params;
+    try {
+      const disclosure = await PrincipalDisclosure.findById(disclosureId).populate('lobbyistId');
+      res.json(disclosure);
+    } catch (err) {
+      res.status(404);
+    }
+  });
+
+  app.use('/api/disclosure/modify_disclosure', requireConcernedUserOrAdmin);
+  app.post('/api/disclosure/modify_disclosure', async (req, res) => {
+    try {
+      const updateTargets = [
+        'lobbyistId',
+        'reportingYear',
+        'principalName',
+        'principalAddress',
+        'principalPhoneNumber',
+        'lobbyistBusinessName',
+        'lobbyistBusinessAddress',
+        'lobbyistBusinessPhoneNumber',
+        'issues'
+      ];
+      const { disclosureId } = req.body.params;
+
+      const updates = {};
+      updateTargets.forEach((field) => {
+        updates[field] = req.body.params[field];
+      });
+      const disclosure = await PrincipalDisclosure.findByIdAndUpdate(disclosureId, updates);
+      res.status(200).send(disclosure);
+    } catch (error) {
+      res.status(502).send();
     }
   });
 };
