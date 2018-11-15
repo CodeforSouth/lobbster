@@ -110,6 +110,16 @@ module.exports = (app) => {
     }
   });
 
+  app.get('/api/all_payments_documentation', async (req, res) => {
+    try {
+      const documentations = await PaymentDocumentation.find({ });
+      res.status(200).json(documentations);
+    } catch (error) {
+      console.log('Error gathering payments documentations.');
+      res.status(502).send();
+    }
+  });
+
   app.post('/api/update_payments_documentation', async (req, res) => {
     const { updatedPaymentsDocumentation } = req.body.params;
     try {
