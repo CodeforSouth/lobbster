@@ -9,6 +9,11 @@ export const fetchPaymentsDocumentation = async (accountId) => {
   return response.data;
 };
 
+export const fetchAllPaymentsDocumentations = async () => {
+  const response = await axios.get('/api/all_payments_documentation');
+  return response.data;
+};
+
 export const updatePaymentsDocumentation = async (updatedDocs) => {
   const response = await axios.post(
     '/api/update_payments_documentation',
