@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import discloseNewPrincipalButton from '../components/discloseNewPrincipalButton';
+import discloseNewPrincipalButton from './discloseNewPrincipalButton';
 
 import { fetchDisclosures } from '../../../requests/disclosures';
 import { fetchYears } from '../../../requests/paymentDocumentation';
@@ -22,7 +22,6 @@ function formatCurrency(amount) {
   for (let i = 0; i < padding; i += 1) {
     spaces += space;
   }
-
   // Build the string.
   return `$${spaces}${amount.toFixed(2)}`;
 }
@@ -72,7 +71,7 @@ const disclosureRow = (
 
   const lobbyistTd = (
     <td style={tdTextStyle}>
-      {  showPrincipal && lobbyistName }
+      { showPrincipal && lobbyistName }
     </td>
   );
 
@@ -114,7 +113,9 @@ const disclosureRow = (
 };
 
 const disclosureTableBlock = (disclosure, includeLobbyistName, linkToDisclosure) => {
-  const { issues, principalName, id, lobbyistId: lobbyist } = disclosure;
+  const {
+    issues, principalName, id, lobbyistId: lobbyist
+  } = disclosure;
   const lobbyistName = lobbyist ? lobbyist.fullName : '';
   const rowCount = issues.length;
   const rows = [];
@@ -189,12 +190,16 @@ export default class DisclosuresOverview extends Component {
 
   async componentDidMount() {
     const { lobbyistId } = this.state;
+    const { setYearSelected } = this.props;
     try {
       const disclosures = await fetchDisclosures(lobbyistId) || { };
       const yearInfo = await fetchYears() || { };
       this.setState({ disclosures, yearInfo, selectedYear: yearInfo.currentYear });
+      if (setYearSelected) {
+        setYearSelected(yearInfo.currentYear);
+      }
     } catch (err) {
-      console.log('Error getting account info.');
+      // console.log('Error getting account info.');
     }
   }
 
@@ -203,6 +208,10 @@ export default class DisclosuresOverview extends Component {
 
     if (target.name === 'selectedYear') {
       newValue = parseInt(newValue, 10);
+      const { setYearSelected } = this.props;
+      if (setYearSelected) {
+        setYearSelected(newValue);
+      }
     }
 
     this.setState({
@@ -235,9 +244,13 @@ export default class DisclosuresOverview extends Component {
 DisclosuresOverview.propTypes = {
   lobbyistId: PropTypes.string,
   includeLobbyistName: PropTypes.bool.isRequired,
-  linkToDisclosure: PropTypes.bool
+  linkToDisclosure: PropTypes.bool,
+  setYearSelected: PropTypes.func,
+  showAddButton: PropTypes.bool
 };
 DisclosuresOverview.defaultProps = {
   lobbyistId: '',
-  linkToDisclosure: false
+  linkToDisclosure: false,
+  setYearSelected: null,
+  showAddButton: false
 };

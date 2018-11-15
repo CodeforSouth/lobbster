@@ -29,6 +29,7 @@ dev-keys.js
 /spec/examples.txt
 .byebug_history
 coverage/
+scratch
 
 # Ignore macOS folder attributes
 .DS_Store
