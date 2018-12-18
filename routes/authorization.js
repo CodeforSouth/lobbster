@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const { hash } = require('../services/bcrypt');
 const requireAdmin = require('../middleware/requireAdmin');
+const logger = require('../services/logger');
 
 const User = mongoose.model('users');
 
@@ -30,6 +31,7 @@ module.exports = (app) => {
       }).save();
       res.status(200).send();
     } catch (error) {
+      logger.error('Error creating user', error);
       res.status(401).send();
     }
   });

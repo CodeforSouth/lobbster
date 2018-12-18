@@ -41,11 +41,13 @@
     "i": "^0.3.6",
     "lodash": "^4.17.11",
     "mongoose": "^5.2.14",
+    "nodemon": "^1.18.9",
     "npm": "^6.4.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "react-router-dom": "^4.3.1",
-    "stripe": "^6.12.1"
+    "stripe": "^6.12.1",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "eslint": "^5.5.0",
