@@ -24,6 +24,7 @@ dev-keys.js
 !/log/.keep
 !/tmp/.keep
 .idea/
+logs/*.log
 
 # Testing Temp Files
 /spec/examples.txt

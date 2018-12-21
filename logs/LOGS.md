@@ -1,0 +1,1 @@
+# This folder is empty to ensure it exists for log storage. Please see ../services/logger.js for implementation details.
